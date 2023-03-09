@@ -15,17 +15,30 @@ $bearer_token = get_bearer_token();
 
 /// Vérification de la présence d'un token
 if(is_jwt_valid($bearer_token)) {
+	/// Récupération des données du token
+	$payload = get_payload($bearer_token);
+
 	switch ($http_method) {
-			/// Cas de la méthode GET
+		/// Cas de la méthode GET
 		case "GET":
 			/// Récupération des critères de recherche envoyés par le Client
-			if (!empty($_GET['id'])) {
-				$matchingData = $sql->GET($_GET['id']);
+			if($payload->role == "publisher") {
+				if (!empty($_GET['id'])) {
+					$matchingData = $sql->GET($_GET['id']);
+				} else {
+					$matchingData = $sql->GETALL();
+				}
+				/// Envoi de la réponse au Client
+				deliver_response(200, "Bien affiché", $matchingData);
 			} else {
-				$matchingData = $sql->GETALL();
+				if (!empty($_GET['id'])) {
+					$matchingData = $sql->GET($_GET['id']);
+				} else {
+					$matchingData = $sql->GETALL();
+				}
+				/// Envoi de la réponse au Client
+				deliver_response(401, "Vous n'avez pas les droits", NULL);
 			}
-			/// Envoi de la réponse au Client
-			deliver_response(200, "Bien affiché", $matchingData);
 			break;
 		/// Cas de la méthode POST
 		case "POST":
@@ -46,9 +59,16 @@ if(is_jwt_valid($bearer_token)) {
 			deliver_response(405, "Méthode non supportée", NULL);
 			break;
 	}
+//pour les personnes non authentifiées
 } else {
-	/// Envoi de la réponse au Client
-	deliver_response(401, "Token invalide", NULL);
+	if($http_method == "GET") {
+		$matchingData = $sql->GETALL();
+		/// Envoi de la réponse au Client
+		deliver_response(200, "Bien affiché", $matchingData);
+	} else {
+		/// Envoi de la réponse au Client
+		deliver_response(401, "Vous n'avez pas les droits", NULL);
+	}
 }
 
 /// Envoi de la réponse au Client
