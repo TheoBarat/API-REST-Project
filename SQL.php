@@ -25,11 +25,30 @@ class RequeteSQL {
     FONCTIONS D'INTERROGATION DE LA BDD
     */
 
-    public function LOGIN($login,$password){
-        $req = $this->linkpdo->prepare("SELECT * FROM `Users` WHERE login = :login AND password = :password");
+    public function LOGIN($login,$password,$role){
+        $req = $this->linkpdo->prepare("SELECT * FROM `Users` WHERE login = :login AND password = :password AND role = :role");
         $req->execute(array(
             'login' => $login,
-            'password' => $password
+            'password' => $password,
+            'role' => $role
+        ));
+
+        return $req->fetchAll(PDO::FETCH_ASSOC);
+    }
+
+    public function GETALL()
+    {
+        $req = $this->linkpdo->prepare("SELECT * FROM article");
+        $req->execute();
+
+        return $req->fetchAll(PDO::FETCH_ASSOC); 
+    }
+
+    public function GET($id)
+    {
+        $req = $this->linkpdo->prepare("SELECT * FROM article where Id_Article = :id");
+        $req->execute(array(
+            'id' => $id
         ));
 
         return $req->fetchAll(PDO::FETCH_ASSOC);

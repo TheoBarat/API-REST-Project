@@ -15,16 +15,18 @@ switch ($http_method) {
 	case "POST":
 		/// Récupération des données envoyées par le Client
 		$postedData = file_get_contents('php://input');
-		$identifiants = json_decode($postedData, true);
-		$login = $identifiants['login'];
-        $password = $identifiants['password'];
-		if($sql->LOGIN($login,$password)){
+		$users = json_decode($postedData, true);
+		$login = $users['login'];
+        $password = $users['password'];
+		$role = $users['role'];
+		if($sql->LOGIN($login,$password,$role)){
             $headers = array(
                 'alg' => 'HS256',
                 'typ' => 'JWT'
             );
             $payload = array(
                 'login' => $login,
+				'role' => $role,
                 'exp' => time() + 86400,
             );
             $token = generate_jwt($headers,$payload);
