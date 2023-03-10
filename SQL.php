@@ -36,19 +36,38 @@ class RequeteSQL {
         return $req->fetchAll(PDO::FETCH_ASSOC);
     }
 
-    public function GetAllArticle()
+    public function getAllArticle()
     {
         $req = $this->linkpdo->prepare("SELECT * FROM article");
         $req->execute();
-
+        
         return $req->fetchAll(PDO::FETCH_ASSOC); 
     }
 
-    public function GetArticle($id)
+    public function getArticle($idArticle)
     {
-        $req = $this->linkpdo->prepare("SELECT * FROM article where Id_Article = :id");
+        $req = $this->linkpdo->prepare("SELECT * FROM article where Id_Article = :idArticle");
         $req->execute(array(
-            'id' => $id
+            'idArticle' => $idArticle
+        ));
+
+        return $req->fetchAll(PDO::FETCH_ASSOC);
+    }
+
+    public function getArticlesByUser($idUser)
+    {
+        $req = $this->linkpdo->prepare("SELECT * FROM article where Id_Article = :idUser");
+        $req->execute(array(
+            'idUser' => $idUser
+        ));
+
+        return $req->fetchAll(PDO::FETCH_ASSOC);
+    }
+
+    public function getLogin($idUser){
+        $req = $this->linkpdo->prepare("SELECT Login FROM `Users` WHERE Id_User = :idUser");
+        $req->execute(array(
+            'idUser' => $idUser
         ));
 
         return $req->fetchAll(PDO::FETCH_ASSOC);
@@ -58,9 +77,22 @@ class RequeteSQL {
     FONCTIONS D'AJOUT DANS LA BDD
     */
 
+    public function insertArticle($auteur,$contenu){
+        $req = $this->linkpdo->prepare('INSERT INTO chuckn_facts VALUES (NULL,:contenu,:,now(),:auteur)');
+        $testreq = $req->execute(array(
+            'auteur' => $auteur,
+            'contenu' => $contenu
+        ));
+        if ($testreq == false) {
+            die("Erreur insertArticle");
+        }
+    }
+
     /*
     FONCTIONS DE MODIFICATION DANS LA BDD
     */
+
+
 
     /*
     FONCTION SUPPRIMER DE LA BDD
