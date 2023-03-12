@@ -17,47 +17,47 @@ $bearer_token = get_bearer_token();
 if(is_jwt_valid($bearer_token)) {
 	/// Récupération des données du token
 	$payload = get_payload($bearer_token);
+	$role = $payload->role;
 
-	switch ($http_method) {
-		/// Cas de la méthode GET
-		case "GET":
-			/// Récupération des critères de recherche envoyés par le Client
-			if($payload->role == "publisher") {
-				if (!empty($_GET['id'])) {
-					$matchingData = $sql->GET($_GET['id']);
+	if ($role == "publisher"){
+		switch($http_method){
+			case "GET":
+				/// Récupération des critères de recherche envoyés par le Client
+				if (!empty($_GET['id'])){
+					$matchingData = $sql -> getArticle($_GET['id']);
 				} else {
-					$matchingData = $sql->GETALL();
+					$matchingData = $sql -> getAllArticle();
 				}
-				/// Envoi de la réponse au Client
 				deliver_response(200, "Bien affiché", $matchingData);
-			} else {
-				if (!empty($_GET['id'])) {
-					$matchingData = $sql->GET($_GET['id']);
-				} else {
-					$matchingData = $sql->GETALL();
-				}
+				break;
+			
+			case "POST":
+				/// Récupération des données envoyées par le Client
+				$postedData = file_get_contents('php://input');
+				$data = json_decode($postedData, true);
+				$auteur = $data['Auteur'];
+				$contenu = $data['Contenu'];
+				$sql -> insertArticle($auteur,$conteu);
+				deliver_response(201, "Ajout réussi", NULL);
+				break;
+
+			case "PUT":
+				/// Récupération des données envoyées par le Client
+				$postedData = file_get_contents('php://input');
+				break;
+
+			case "DELETE":
+				break;
+
+			default:
 				/// Envoi de la réponse au Client
-				deliver_response(401, "Vous n'avez pas les droits", NULL);
-			}
-			break;
-		/// Cas de la méthode POST
-		case "POST":
-			/// Récupération des données envoyées par le Client
-			$postedData = file_get_contents('php://input');
-			break;
-		/// Cas de la méthode PUT
-		case "PUT":
-			/// Récupération des données envoyées par le Client
-			$postedData = file_get_contents('php://input');
-			break;
-		/// Cas de la méthode DELETE
-		case "DELETE":
-			break;
-		/// Cas par défaut
-		default:
-			/// Envoi de la réponse au Client
-			deliver_response(405, "Méthode non supportée", NULL);
-			break;
+				deliver_response(405, "Méthode non supportée", NULL);
+				break;
+		}
+	} else if ($role == "moderator"){
+		switch($http_method){
+
+		}
 	}
 //pour les personnes non authentifiées
 } else {

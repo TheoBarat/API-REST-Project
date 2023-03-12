@@ -36,7 +36,7 @@ class RequeteSQL {
         return $req->fetchAll(PDO::FETCH_ASSOC);
     }
 
-    public function GetAllArticle()
+    public function getAllArticle()
     {
         $req = $this->linkpdo->prepare("SELECT * FROM article");
         $req->execute();
@@ -44,7 +44,7 @@ class RequeteSQL {
         return $req->fetchAll(PDO::FETCH_ASSOC); 
     }
 
-    public function GetArticle($id)
+    public function getArticle($id)
     {
         $req = $this->linkpdo->prepare("SELECT * FROM article where Id_Article = :id");
         $req->execute(array(
