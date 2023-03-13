@@ -64,7 +64,7 @@ class RequeteSQL {
         return $req->fetchAll(PDO::FETCH_ASSOC);
     }
 
-    public function getLogin($idUser){
+    public function getUsername($idUser){
         $req = $this->linkpdo->prepare("SELECT Login FROM `Users` WHERE Id_User = :idUser");
         $req->execute(array(
             'idUser' => $idUser
