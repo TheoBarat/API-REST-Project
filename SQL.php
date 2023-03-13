@@ -92,7 +92,16 @@ class RequeteSQL {
     FONCTIONS DE MODIFICATION DANS LA BDD
     */
 
-
+    //fonction pour supprimer un article
+    public function deleteArticle($idArticle){
+        $req = $this->linkpdo->prepare('DELETE FROM article WHERE Id_Article = :idArticle');
+        $testreq = $req->execute(array(
+            'idArticle' => $idArticle
+        ));
+        if ($testreq == false) {
+            die("Erreur deleteArticle");
+        }
+    }
 
     /*
     FONCTION SUPPRIMER DE LA BDD

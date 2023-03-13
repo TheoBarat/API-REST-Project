@@ -56,7 +56,44 @@ if(is_jwt_valid($bearer_token)) {
 		}
 	} else if ($role == "moderator"){
 		switch($http_method){
+			case "GET":
+				/// Récupération des critères de recherche envoyés par le Client
+				if (!empty($_GET['id'])){
+					$matchingData = $sql -> getArticle($_GET['id']);
+				} else {
+					$matchingData = $sql -> getAllArticle();
+				}
+				deliver_response(200, "Bien affiché", $matchingData);
+				break;
+			
+			case "POST":
+				/// Récupération des données envoyées par le Client
+				$postedData = file_get_contents('php://input');
+				$data = json_decode($postedData, true);
+				$auteur = $data['Auteur'];
+				$contenu = $data['Contenu'];
+				$sql -> insertArticle($auteur,$conteu);
+				deliver_response(201, "Ajout réussi", NULL);
+				break;
 
+			case "PUT":
+				/// Récupération des données envoyées par le Client
+				$postedData = file_get_contents('php://input');
+				break;
+
+			case "DELETE":
+				/// Récupération de l'identifiant de la ressource envoyé par le Client
+				if (!empty($_GET['id'])) {
+					$sql ->deleteArticle($_GET['id']);
+				}
+				/// Envoi de la réponse au Client
+				deliver_response(200, "Bien supprimé", NULL);
+				break;
+
+			default:
+				/// Envoi de la réponse au Client
+				deliver_response(405, "Méthode non supportée", NULL);
+				break;
 		}
 	}
 //pour les personnes non authentifiées
@@ -79,7 +116,7 @@ if(is_jwt_valid($bearer_token)) {
 		deliver_response(200, "Bien affiché", $result);
 	} else {
 		/// Envoi de la réponse au Client
-		deliver_response(401, "Vous n'avez pas les droits", NULL);
+		deliver_response(405, "Méthode non supportée", NULL);
 	}
 }
 
