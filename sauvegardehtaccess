@@ -1,0 +1,5 @@
+RewriteEngine On
+
+RewriteRule ^/serveurApplication/author/(\d)$ serveurApplication.php?traitement=author&user=$1 [L]
+RewriteRule ^/serveurAuthentification/mesArticles serveurAuthentification.php?traitement=mesArticles [L]
+RewriteRule ^/serveurAuthentification/article.php/(\-d+) serveurAuthentification.php?traitement=article&id=$1 [L]

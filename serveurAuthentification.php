@@ -27,9 +27,9 @@ switch ($http_method) {
             $payload = array(
                 'login' => $login,
 				'role' => $role,
-                'exp' => time() + 86400,
+                'exp' => time() + 3600000,
             );
-            $token = generate_jwt($headers,$payload);
+            $token = generate_jwt($headers, $payload);
             /// Envoi de la réponse au Client
             deliver_response(200, "Bien connecté", $token);
         }

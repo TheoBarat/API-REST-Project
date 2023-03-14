@@ -40,7 +40,6 @@ class RequeteSQL {
     {
         $req = $this->linkpdo->prepare("SELECT * FROM article");
         $req->execute();
-        
         return $req->fetchAll(PDO::FETCH_ASSOC); 
     }
 
@@ -54,12 +53,20 @@ class RequeteSQL {
         return $req->fetchAll(PDO::FETCH_ASSOC);
     }
 
-    public function getArticlesByUser($idUser)
+    public function getArticlesByUser($loginUser, $role)
     {
-        $req = $this->linkpdo->prepare("SELECT * FROM article where Id_Article = :idUser");
-        $req->execute(array(
-            'idUser' => $idUser
-        ));
+        if ($role == "moderator") {
+            $req = $this->linkpdo->prepare("SELECT * FROM article, users where article.id_user = users.id_user AND users.login = :loginUser");
+            $req->execute(array(
+                'loginUser' => $loginUser
+            ));
+        } elseif ($role == "publisher") {
+            $req = $this->linkpdo->prepare("SELECT users.login, article.date_publication, article.contenu, count(a_like)  FROM article, users, interagir where article.id_user = users.id_user AND users.id_users = interagir.id_users AND article.id_article = interagir.id_article AND users.login = :loginUser");
+            $req->execute(array(
+                'loginUser' => $loginUser
+            ));
+        }
+        
 
         return $req->fetchAll(PDO::FETCH_ASSOC);
     }
