@@ -24,10 +24,21 @@ if ($bearer_token != null){
 			switch ($http_method) {
 				case "GET":
 					/// Récupération des critères de recherche envoyés par le Client
-					if (!empty($_GET['id'])){
-						$matchingData = $sql -> getArticle($_GET['id']);
+					if (!empty($_GET['traitement'])) { // Article en fonction de l'auteur (login de l'auteur)
+						$traitement = $_GET['traitement'];
+						switch ($traitement) {
+							case 'author':
+								$matchingData = $sql -> getArticlesByUser($_GET['user'], $role);
+								break;
+							case 'article':
+								$matchingData = $sql -> getArticle($_GET['id']);
+								break;
+							default:
+								deliver_response(400, "Mauvaise requête", null);
+								exit;
+						}
 					} else {
-						$matchingData = $sql -> getAllArticle();
+						$matchingData = $sql -> getAllArticle($role);
 					}
 					deliver_response(200, "Bien affiché", $matchingData);
 					break;
@@ -39,7 +50,7 @@ if ($bearer_token != null){
 					$auteur = $data['Auteur'];
 					$contenu = $data['Contenu'];
 					$sql -> insertArticle($auteur,$conteu);
-					deliver_response(201, "Ajout réussi", NULL);
+					deliver_response(201, "Ajout réussi", null);
 					break;
 
 				case "PUT":
@@ -52,7 +63,7 @@ if ($bearer_token != null){
 
 				default:
 					/// Envoi de la réponse au Client
-					deliver_response(405, "Méthode non supportée", NULL);
+					deliver_response(405, "Méthode non supportée", null);
 					break;
 			}
 		} elseif ($role == "moderator") {
@@ -113,24 +124,31 @@ if ($bearer_token != null){
 
 } else { // Si le client n'est pas identifié
 	if ($http_method == "GET") {
-		//Consulter les messages existants (auteur, date de publication, contenu)
-		$matchingData = $sql->getAllArticle();
-		$result = array();
-		foreach ($matchingData as $value) {
-			$login = $sql->getUsername($value['Id_User']);
-			$data = array(
-				'auteur' => $login[0]['Login'],
-				'date' => date('d/m/Y', strtotime($value['Date_Publication'])),
-				'contenu' => $value['Contenu']
-			);
-			array_push($result, $data); // ajoute le tableau $data au tableau $result
-		}
-		/// Envoi de la réponse au Client
-		deliver_response(200, "Bien affiché user", $result);
-	} else {
-		/// Envoi de la réponse au Client
-		deliver_response(405, "Méthode non supportée", NULL);
-	}
+        //Consulter les messages existants (auteur, date de publication, contenu)
+        $matchingData = $sql->getAllArticle();
+        $result = array();
+        foreach ($matchingData as $value) {
+            $login = $sql->getUsername($value['Id_User']);
+            $data = array(
+                'auteur' => $login[0]['Login'],
+                'date' => date('d/m/Y', strtotime($value['Date_Publication'])),
+                'contenu' => $value['Contenu']
+            );
+            array_push($result, $data); // ajoute le tableau $data au tableau $result
+        }
+        /// Envoi de la réponse au Client
+        deliver_response(200, "Bien affiché user", $result);
+    } else {
+        /// Envoi de la réponse au Client
+        deliver_response(405, "Méthode non supportée", NULL);
+    }
+	// if ($http_method == "GET") {
+	// 	$matchingData = $sql->getAllArticle();
+	// 	deliver_response(200, "Bien affiché user", $matchingData);
+	// } else {
+	// 	/// Envoi de la réponse au Client
+	// 	deliver_response(405, "Méthode non supportée", NULL);
+	// }
 }
 /// Envoi de la réponse au Client
 function deliver_response($status, $status_message, $data)

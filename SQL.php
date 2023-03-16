@@ -36,11 +36,52 @@ class RequeteSQL {
         return $req->fetchAll(PDO::FETCH_ASSOC);
     }
 
-    public function getAllArticle()
+    public function getAllArticle($role = null)
     {
-        $req = $this->linkpdo->prepare("SELECT * FROM article");
-        $req->execute();
-        return $req->fetchAll(PDO::FETCH_ASSOC); 
+        switch ($role){
+            case "moderator":
+                $req = $this->linkpdo->prepare("SELECT * FROM article");
+                $req->execute();
+                break;
+            case "publisher":
+                $reqArticle = $this->linkpdo->prepare("SELECT article.id_article, article.date_publication, article.contenu, users.login FROM article, users WHERE article.id_user = users.id_user");
+                $reqArticle->execute();
+                $reqArticle -> fetchAll(PDO::FETCH_ASSOC);
+                $result = array();
+                foreach ($reqArticle as $value) {
+                    $data = array(
+                        'Auteur' => $value['users.login'],
+                        'Date' => date('d/m/Y', strtotime($value['article.date_publication'])),
+                        'Contenu' => $value['article.contenu'],
+                        'NbLike' => $this-> getNbLike($value['id_article']),
+                        'NbDislike' => $this-> getNbDislike($value['id_article'])
+                    );
+                    array_push($result, $data); // ajoute le tableau $data au tableau $result
+                }
+                break;
+            default :
+                $reqArticle = $this -> linkpdo -> prepare('SELECT article.id_article, article.date_publication, article.contenu, users.login FROM article, users WHERE article.id_user = user.id_user');
+                $reqArticle -> execute();
+                break;
+        }
+        // return $req->fetchAll(PDO::FETCH_ASSOC);
+        return $result;
+    }
+
+    public function getNbLike($id_Article){
+        $req = $this->linkpdo->prepare("SELECT COUNT(*) FROM interagir WHERE interagir.id_article = :idArticle AND a_like = 1");
+        $req->execute(array(
+            'idArticle' => $id_Article
+        ));
+        return $req->fetchAll(PDO::FETCH_ASSOC)[0]['COUNT(*)'];
+    }
+
+    public function getNbDislike($id_Article){
+        $req = $this->linkpdo->prepare("SELECT COUNT(*) FROM interagir WHERE interagir.id_article = :idArticle AND a_like = -1");
+        $req->execute(array(
+            'idArticle' => $id_Article
+        ));
+        return $req->fetchAll(PDO::FETCH_ASSOC)[0]['COUNT(*)'];
     }
 
     public function getArticle($idArticle)
@@ -53,21 +94,25 @@ class RequeteSQL {
         return $req->fetchAll(PDO::FETCH_ASSOC);
     }
 
-    public function getArticlesByUser($loginUser, $role)
+    public function getArticlesByUser($loginUser, $role = null)
     {
-        if ($role == "moderator") {
-            $req = $this->linkpdo->prepare("SELECT * FROM article, users where article.id_user = users.id_user AND users.login = :loginUser");
-            $req->execute(array(
-                'loginUser' => $loginUser
-            ));
-        } elseif ($role == "publisher") {
-            $req = $this->linkpdo->prepare("SELECT users.login, article.date_publication, article.contenu, count(a_like)  FROM article, users, interagir where article.id_user = users.id_user AND users.id_users = interagir.id_users AND article.id_article = interagir.id_article AND users.login = :loginUser");
-            $req->execute(array(
-                'loginUser' => $loginUser
-            ));
+        switch ($role){
+            case "moderator":
+                $req = $this->linkpdo-> prepare("SELECT * FROM article, users where article.id_user = users.id_user AND users.login = :loginUser");
+                $req->execute(array(
+                    'loginUser' => $loginUser
+                ));
+                break;
+            case "publisher":
+                $req = $this -> linkpdo -> prepare("SELECT article.id_article, article.date_publication, article.contenu, users.login FROM article, users WHERE article.id_user = users.id_user AND users.login = :loginUser");
+                $req->execute(array(
+                    'loginUser' => $loginUser
+                ));
+                break;
+            default :
+            $req = $this -> linkpdo -> prepare('SELECT article.id_article, article.date_publication, article.contenu, users.login FROM article, users');
+                break;
         }
-        
-
         return $req->fetchAll(PDO::FETCH_ASSOC);
     }
 
