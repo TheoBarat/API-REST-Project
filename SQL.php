@@ -72,6 +72,8 @@ class RequeteSQL {
                     );
                     array_push($result, $data); // ajoute le tableau $data au tableau $result
                 }
+
+                return $result;
                 break;
             default :
                 $reqArticle = $this->linkpdo->prepare("SELECT article.id_article, article.date_publication, article.contenu, users.login FROM article, users WHERE article.id_user = users.id_user");
