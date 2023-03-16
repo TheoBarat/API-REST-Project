@@ -68,8 +68,8 @@ if ($bearer_token != null){
 			}
 		} elseif ($role == "moderator") {
 			switch ($http_method) {
-				case "GET":
 
+				case "GET":
 					if (!empty($_GET['traitement'])) { // Article en fonction de l'auteur (login de l'auteur)
 						$traitement = $_GET['traitement'];
 						switch ($traitement) {
@@ -105,11 +105,12 @@ if ($bearer_token != null){
 
 				case "DELETE":
 					/// Récupération de l'identifiant de la ressource envoyé par le Client
-					if (!empty($_GET['id'])) {
+					if ($_GET['traitement'] == "supprimerArticle") {
 						$sql ->deleteArticle($_GET['id']);
+						deliver_response(200, "Bien supprimé", NULL);
+					} else {
+						deliver_response(400, "Mauvaise requête", NULL);
 					}
-					/// Envoi de la réponse au Client
-					deliver_response(200, "Bien supprimé", NULL);
 					break;
 
 				default:

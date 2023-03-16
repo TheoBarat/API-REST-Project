@@ -42,30 +42,33 @@ class RequeteSQL {
             case "moderator":
                 $req = $this->linkpdo->prepare("SELECT * FROM article");
                 $req->execute();
+                return $req;
                 break;
             case "publisher":
                 $reqArticle = $this->linkpdo->prepare("SELECT article.id_article, article.date_publication, article.contenu, users.login FROM article, users WHERE article.id_user = users.id_user");
                 $reqArticle->execute();
-                $reqArticle -> fetchAll(PDO::FETCH_ASSOC);
+                $reqArticle = $reqArticle -> fetchAll(PDO::FETCH_ASSOC);
                 $result = array();
                 foreach ($reqArticle as $value) {
                     $data = array(
-                        'Auteur' => $value['users.login'],
-                        'Date' => date('d/m/Y', strtotime($value['article.date_publication'])),
-                        'Contenu' => $value['article.contenu'],
+                        'Auteur' => $value['login'],
+                        'Date' => date('d/m/Y', strtotime($value['date_publication'])),
+                        'Contenu' => $value['contenu'],
                         'NbLike' => $this-> getNbLike($value['id_article']),
                         'NbDislike' => $this-> getNbDislike($value['id_article'])
                     );
                     array_push($result, $data); // ajoute le tableau $data au tableau $result
                 }
+
+                return $result;
                 break;
             default :
                 $reqArticle = $this -> linkpdo -> prepare('SELECT article.id_article, article.date_publication, article.contenu, users.login FROM article, users WHERE article.id_user = user.id_user');
                 $reqArticle -> execute();
+                return $reqArticle;
                 break;
         }
         // return $req->fetchAll(PDO::FETCH_ASSOC);
-        return $result;
     }
 
     public function getNbLike($id_Article){
