@@ -40,19 +40,33 @@ class RequeteSQL {
     {
         switch ($role){
             case "moderator":
-                $req = $this->linkpdo->prepare("SELECT * FROM article");
-                $req->execute();
-                break;
-            case "publisher":
                 $reqArticle = $this->linkpdo->prepare("SELECT article.id_article, article.date_publication, article.contenu, users.login FROM article, users WHERE article.id_user = users.id_user");
-                $reqArticle->execute();
-                $reqArticle -> fetchAll(PDO::FETCH_ASSOC);
+                $reqArticle -> execute();
+                $reqArticle = $reqArticle -> fetchAll(PDO::FETCH_ASSOC);
                 $result = array();
                 foreach ($reqArticle as $value) {
                     $data = array(
-                        'Auteur' => $value['users.login'],
-                        'Date' => date('d/m/Y', strtotime($value['article.date_publication'])),
-                        'Contenu' => $value['article.contenu'],
+                        'Auteur' => $value['login'],
+                        'Date' => date('d/m/Y', strtotime($value['date_publication'])),
+                        'Contenu' => $value['contenu'],
+                        'NbLike' => $this-> getNbLike($value['id_article']),
+                        'UserLike' => $this-> getUserLike($value['id_article']),
+                        'NbDislike' => $this-> getNbDislike($value['id_article']),
+                        'UserDislike' => $this-> getUserDislike($value['id_article'])
+                    );
+                    array_push($result, $data); // ajoute le tableau $data au tableau $result
+                }
+                break;
+            case "publisher":
+                $reqArticle = $this->linkpdo->prepare("SELECT article.id_article, article.date_publication, article.contenu, users.login FROM article, users WHERE article.id_user = users.id_user");
+                $reqArticle -> execute();
+                $reqArticle = $reqArticle -> fetchAll(PDO::FETCH_ASSOC);
+                $result = array();
+                foreach ($reqArticle as $value) {
+                    $data = array(
+                        'Auteur' => $value['login'],
+                        'Date' => date('d/m/Y', strtotime($value['date_publication'])),
+                        'Contenu' => $value['contenu'],
                         'NbLike' => $this-> getNbLike($value['id_article']),
                         'NbDislike' => $this-> getNbDislike($value['id_article'])
                     );
@@ -60,28 +74,21 @@ class RequeteSQL {
                 }
                 break;
             default :
-                $reqArticle = $this -> linkpdo -> prepare('SELECT article.id_article, article.date_publication, article.contenu, users.login FROM article, users WHERE article.id_user = user.id_user');
+                $reqArticle = $this->linkpdo->prepare("SELECT article.id_article, article.date_publication, article.contenu, users.login FROM article, users WHERE article.id_user = users.id_user");
                 $reqArticle -> execute();
+                $reqArticle = $reqArticle -> fetchAll(PDO::FETCH_ASSOC);
+                $result = array();
+                foreach ($reqArticle as $value) {
+                    $data = array(
+                        'Auteur' => $value['login'],
+                        'Date' => date('d/m/Y', strtotime($value['date_publication'])),
+                        'Contenu' => $value['contenu']
+                    );
+                    array_push($result, $data); // ajoute le tableau $data au tableau $result
+                }
                 break;
         }
-        // return $req->fetchAll(PDO::FETCH_ASSOC);
         return $result;
-    }
-
-    public function getNbLike($id_Article){
-        $req = $this->linkpdo->prepare("SELECT COUNT(*) FROM interagir WHERE interagir.id_article = :idArticle AND a_like = 1");
-        $req->execute(array(
-            'idArticle' => $id_Article
-        ));
-        return $req->fetchAll(PDO::FETCH_ASSOC)[0]['COUNT(*)'];
-    }
-
-    public function getNbDislike($id_Article){
-        $req = $this->linkpdo->prepare("SELECT COUNT(*) FROM interagir WHERE interagir.id_article = :idArticle AND a_like = -1");
-        $req->execute(array(
-            'idArticle' => $id_Article
-        ));
-        return $req->fetchAll(PDO::FETCH_ASSOC)[0]['COUNT(*)'];
     }
 
     public function getArticle($idArticle)
@@ -98,22 +105,61 @@ class RequeteSQL {
     {
         switch ($role){
             case "moderator":
-                $req = $this->linkpdo-> prepare("SELECT * FROM article, users where article.id_user = users.id_user AND users.login = :loginUser");
-                $req->execute(array(
+                $reqArticle = $this->linkpdo->prepare("SELECT article.id_article, article.date_publication, article.contenu, users.login FROM article, users WHERE article.id_user = users.id_user AND users.login = :loginUser");
+                $reqArticle -> execute(array(
                     'loginUser' => $loginUser
                 ));
+                $reqArticle = $reqArticle -> fetchAll(PDO::FETCH_ASSOC);
+                $result = array();
+                foreach ($reqArticle as $value) {
+                    $data = array(
+                        'Auteur' => $value['login'],
+                        'Date' => date('d/m/Y', strtotime($value['date_publication'])),
+                        'Contenu' => $value['contenu'],
+                        'NbLike' => $this-> getNbLike($value['id_article']),
+                        'UserLike' => $this-> getUserLike($value['id_article']),
+                        'NbDislike' => $this-> getNbDislike($value['id_article']),
+                        'UserDislike' => $this-> getUserDislike($value['id_article'])
+                    );
+                    array_push($result, $data); // ajoute le tableau $data au tableau $result
+                }
                 break;
             case "publisher":
-                $req = $this -> linkpdo -> prepare("SELECT article.id_article, article.date_publication, article.contenu, users.login FROM article, users WHERE article.id_user = users.id_user AND users.login = :loginUser");
-                $req->execute(array(
+                $reqArticle = $this->linkpdo->prepare("SELECT article.id_article, article.date_publication, article.contenu, users.login FROM article, users WHERE article.id_user = users.id_user AND users.login = :loginUser");
+                $reqArticle -> execute(array(
                     'loginUser' => $loginUser
                 ));
+                $reqArticle = $reqArticle -> fetchAll(PDO::FETCH_ASSOC);
+                $result = array();
+                foreach ($reqArticle as $value) {
+                    $data = array(
+                        'Auteur' => $value['login'],
+                        'Date' => date('d/m/Y', strtotime($value['date_publication'])),
+                        'Contenu' => $value['contenu'],
+                        'NbLike' => $this-> getNbLike($value['id_article']),
+                        'NbDislike' => $this-> getNbDislike($value['id_article'])
+                    );
+                    array_push($result, $data); // ajoute le tableau $data au tableau $result
+                }
                 break;
             default :
-            $req = $this -> linkpdo -> prepare('SELECT article.id_article, article.date_publication, article.contenu, users.login FROM article, users');
+                $reqArticle = $this->linkpdo->prepare("SELECT article.id_article, article.date_publication, article.contenu, users.login FROM article, users WHERE article.id_user = users.id_user AND users.login = :loginUser");
+                $reqArticle -> execute(array(
+                    'loginUser' => $loginUser
+                ));
+                $reqArticle = $reqArticle -> fetchAll(PDO::FETCH_ASSOC);
+                $result = array();
+                foreach ($reqArticle as $value) {
+                    $data = array(
+                        'Auteur' => $value['login'],
+                        'Date' => date('d/m/Y', strtotime($value['date_publication'])),
+                        'Contenu' => $value['contenu']
+                    );
+                    array_push($result, $data); // ajoute le tableau $data au tableau $result
+                }
                 break;
         }
-        return $req->fetchAll(PDO::FETCH_ASSOC);
+        return $result;
     }
 
     public function getUsername($idUser){
@@ -123,6 +169,38 @@ class RequeteSQL {
         ));
 
         return $req->fetchAll(PDO::FETCH_ASSOC);
+    }
+
+    public function getUserLike($id_Article){
+        $req = $this -> linkpdo -> prepare ("SELECT users.login FROM interagir, users WHERE interagir.id_user = users.id_user AND interagir.id_article = :idArticle AND interagir.a_like = 1");
+        $req -> execute(array(
+            'idArticle' => $id_Article
+        ));
+        return $req->fetchAll(PDO::FETCH_ASSOC);
+    }
+
+    public function getUserDislike($id_Article){
+        $req = $this -> linkpdo -> prepare ("SELECT users.login FROM interagir, users WHERE interagir.id_user = users.id_user AND interagir.id_article = :idArticle AND interagir.a_like = -1");
+        $req -> execute(array(
+            'idArticle' => $id_Article
+        ));
+        return $req->fetchAll(PDO::FETCH_ASSOC);
+    }
+
+    public function getNbLike($id_Article){
+        $req = $this->linkpdo->prepare("SELECT COUNT(*) FROM interagir WHERE interagir.id_article = :idArticle AND a_like = 1");
+        $req->execute(array(
+            'idArticle' => $id_Article
+        ));
+        return $req->fetchAll(PDO::FETCH_ASSOC)[0]['COUNT(*)'];
+    }
+
+    public function getNbDislike($id_Article){
+        $req = $this->linkpdo->prepare("SELECT COUNT(*) FROM interagir WHERE interagir.id_article = :idArticle AND a_like = -1");
+        $req->execute(array(
+            'idArticle' => $id_Article
+        ));
+        return $req->fetchAll(PDO::FETCH_ASSOC)[0]['COUNT(*)'];
     }
 
     /*

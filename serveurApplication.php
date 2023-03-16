@@ -33,6 +33,9 @@ if ($bearer_token != null){
 							case 'article':
 								$matchingData = $sql -> getArticle($_GET['id']);
 								break;
+							case 'mesArticles':
+								$matchingData = $sql -> getArticlesByUser($payload -> login, $role);
+								break;
 							default:
 								deliver_response(400, "Mauvaise requête", null);
 								exit;
@@ -69,7 +72,6 @@ if ($bearer_token != null){
 		} elseif ($role == "moderator") {
 			switch ($http_method) {
 				case "GET":
-
 					if (!empty($_GET['traitement'])) { // Article en fonction de l'auteur (login de l'auteur)
 						$traitement = $_GET['traitement'];
 						switch ($traitement) {
@@ -80,10 +82,11 @@ if ($bearer_token != null){
 								$matchingData = $sql -> getArticle($_GET['id']);
 								break;
 							default:
-								// deliver_response(400, "Mauvaise requête", NULL);
-								// exit;
-								break;
+								deliver_response(400, "Mauvaise requête", NULL);
+								exit;
 						}
+					} else {
+						$matchingData = $sql -> getAllArticle($role);
 					}
 					deliver_response(200, "Bien affiché Moderator", $matchingData);
 					break;
@@ -124,31 +127,27 @@ if ($bearer_token != null){
 
 } else { // Si le client n'est pas identifié
 	if ($http_method == "GET") {
-        //Consulter les messages existants (auteur, date de publication, contenu)
-        $matchingData = $sql->getAllArticle();
-        $result = array();
-        foreach ($matchingData as $value) {
-            $login = $sql->getUsername($value['Id_User']);
-            $data = array(
-                'auteur' => $login[0]['Login'],
-                'date' => date('d/m/Y', strtotime($value['Date_Publication'])),
-                'contenu' => $value['Contenu']
-            );
-            array_push($result, $data); // ajoute le tableau $data au tableau $result
-        }
-        /// Envoi de la réponse au Client
-        deliver_response(200, "Bien affiché user", $result);
+		if (!empty($_GET['traitement'])) { // Article en fonction de l'auteur (login de l'auteur)
+			$traitement = $_GET['traitement'];
+			switch ($traitement) {
+				case 'author':
+					$matchingData = $sql -> getArticlesByUser($_GET['user']);
+					break;
+				case 'article':
+					$matchingData = $sql -> getArticle($_GET['id']);
+					break;
+				default:
+					deliver_response(400, "Mauvaise requête", NULL);
+					exit;
+			}
+		} else {
+        	$matchingData = $sql->getAllArticle(); //Consulter les messages existants (auteur, date de publication, contenu)
+		}
+        deliver_response(200, "Bien affiché user", $matchingData); /// Envoi de la réponse au Client
     } else {
         /// Envoi de la réponse au Client
         deliver_response(405, "Méthode non supportée", NULL);
     }
-	// if ($http_method == "GET") {
-	// 	$matchingData = $sql->getAllArticle();
-	// 	deliver_response(200, "Bien affiché user", $matchingData);
-	// } else {
-	// 	/// Envoi de la réponse au Client
-	// 	deliver_response(405, "Méthode non supportée", NULL);
-	// }
 }
 /// Envoi de la réponse au Client
 function deliver_response($status, $status_message, $data)
