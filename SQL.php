@@ -231,21 +231,6 @@ class RequeteSQL {
         ));
         return $req->fetchAll(PDO::FETCH_ASSOC);
     }
-
-    //on regarde si un article a des likes ou dislike dans la table interagir et si c'est le cas, on vide toute les lignes de la table interagir avec l'id de l'article
-    public function deleteInteragir($idArticle){
-        $req = $this->linkpdo->prepare("SELECT count(*) as nb FROM interagir WHERE id_article = :idArticle");
-        $req->execute(array(
-            'idArticle' => $idArticle
-        ));
-        $result = $req->fetchAll(PDO::FETCH_ASSOC);
-        if ($result['nb'] > 0) {
-            $req = $this->linkpdo->prepare("DELETE FROM interagir WHERE id_article = :idArticle");
-            $req->execute(array(
-                'idArticle' => $idArticle
-            ));
-        }
-    }
     
     public function getUserLike($id_Article){
         $req = $this -> linkpdo -> prepare ("SELECT users.login FROM interagir, users WHERE interagir.id_user = users.id_user AND interagir.id_article = :idArticle AND interagir.a_like = 1");
@@ -299,6 +284,12 @@ class RequeteSQL {
     FONCTIONS DE MODIFICATION DANS LA BDD
     */
 
+    
+
+    /*
+    FONCTION SUPPRIMER DE LA BDD
+    */
+
     //fonction pour supprimer un article
     public function deleteArticle($idArticle){
         $this->deleteInteragir($idArticle);
@@ -311,12 +302,45 @@ class RequeteSQL {
             die("Erreur deleteArticle");
         }
 
-        
+        $this->deleteInteragir($idArticle);
     }
 
-    /*
-    FONCTION SUPPRIMER DE LA BDD
-    */
+    //on regarde si un article a des likes ou dislike dans la table interagir et si c'est le cas, on vide toute les lignes de la table interagir avec l'id de l'article
+    public function deleteInteragir($idArticle){
+        $req = $this->linkpdo->prepare("SELECT count(*) as nb FROM interagir WHERE id_article = :idArticle");
+        $req->execute(array(
+            'idArticle' => $idArticle
+        ));
+        $result = $req->fetchAll(PDO::FETCH_ASSOC);
+        if ($result[0] > 0) {
+            $req = $this->linkpdo->prepare("DELETE FROM interagir WHERE id_article = :idArticle");
+            $req->execute(array(
+                'idArticle' => $idArticle
+            ));
+        }
+    }
+
+    public function deleteArticlesUser($username){
+        $idUser = $this->getUserId($username);
+        //requete pour récuperer tous les articles d'un utilisateur
+        $req = $this->linkpdo->prepare("SELECT id_article FROM article WHERE id_user = :idUser");
+        $req->execute(array(
+            'idUser' => $idUser[0]['Id_User']
+        ));
+        //on crée une boucle et tant qu'il reste un article, on supprime les likes et dislikes de l'article
+        while ($result = $req->fetchAll(PDO::FETCH_ASSOC)) {
+            $this->deleteInteragir($result[0]['id_article']);
+        }
+
+        $req = $this->linkpdo->prepare('DELETE FROM article WHERE Id_User = :idUser');
+        $testreq = $req->execute(array(
+            'idUser' => $idUser[0]['Id_User']
+        ));
+        if ($testreq == false) {
+            die("Erreur deleteArticle");
+        }
+
+    }
 
 }
 ?>

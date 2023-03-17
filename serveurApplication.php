@@ -71,6 +71,12 @@ if ($bearer_token != null){
 					break;
 
 				case "DELETE":
+					if ($_GET['traitement'] == "supprimerMesArticles") {
+						$sql ->deleteArticle($payload -> login);
+						deliver_response(200, "Bien supprimé", NULL);
+					} else {
+						deliver_response(400, "Mauvaise requête", NULL);
+					}
 					break;
 
 				default:
@@ -109,7 +115,7 @@ if ($bearer_token != null){
 				case "DELETE":
 					/// Récupération de l'identifiant de la ressource envoyé par le Client
 					if ($_GET['traitement'] == "supprimerArticle") {
-						$sql ->deleteArticle($_GET['id']);
+						$sql ->deleteArticle($GET_['id']);
 						deliver_response(200, "Bien supprimé", NULL);
 					} else {
 						deliver_response(400, "Mauvaise requête", NULL);

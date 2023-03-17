@@ -8,6 +8,8 @@ RewriteRule ^serveurApplication/mesArticles serveurApplication.php?traitement=me
 
 RewriteRule ^serveurApplication/article/([0-9]+) serveurApplication.php?traitement=article&idArticle=$1 [L]
 
-RewriteRule ^serveurApplication/supprimerArticle/[0-9]+ serveurApplication.php?traitement=supprimerArticle&id=$1 [L]
+RewriteRule ^serveurApplication/supprimerArticle/([0-9]+) serveurApplication.php?traitement=supprimerArticle&id=$1 [L]
+
+RewriteRule ^serveurApplication/supprimerMesArticles serveurApplication.php?traitement=supprimerMesArticles [L]
 
 RewriteRule ^serveurApplication/ajouterArticle serveurApplication.php?traitement=ajouterArticle [L]	
