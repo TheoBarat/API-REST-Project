@@ -128,6 +128,22 @@ class RequeteSQL {
         return $req->fetchAll(PDO::FETCH_ASSOC);
     }
 
+    //on regarde si un article a des likes ou dislike dans la table interagir et si c'est le cas, on vide toute les lignes de la table interagir avec l'id de l'article
+    public function deleteInteragir($idArticle){
+        $req = $this->linkpdo->prepare("SELECT * FROM interagir WHERE id_article = :idArticle");
+        $req->execute(array(
+            'idArticle' => $idArticle
+        ));
+        $result = $req->fetchAll(PDO::FETCH_ASSOC);
+        if (count($result) > 0){
+            $req = $this->linkpdo->prepare("DELETE FROM interagir WHERE id_article = :idArticle");
+            $req->execute(array(
+                'idArticle' => $idArticle
+            ));
+        }
+    }
+    
+
     /*
     FONCTIONS D'AJOUT DANS LA BDD
     */
@@ -156,6 +172,8 @@ class RequeteSQL {
         if ($testreq == false) {
             die("Erreur deleteArticle");
         }
+
+        $this->deleteInteragir($idArticle);
     }
 
     /*
