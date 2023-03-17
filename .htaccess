@@ -6,7 +6,8 @@ RewriteRule ^serveurApplication/author/([a-zA-Z]+) serveurApplication.php?traite
 
 RewriteRule ^serveurApplication/mesArticles serveurApplication.php?traitement=mesArticles [L]
 
-RewriteRule ^serveurApplication/article/(\-d+) serveurApplication.php?traitement=article&id=$1 [L]
+RewriteRule ^serveurApplication/article/([0-9]+) serveurApplication.php?traitement=article&idArticle=$1 [L]
 
-RewriteRule ^serveurApplication/supprimerArticle/(\-d+) serveurApplication.php?traitement=supprimerArticle&id=$1 [L]
+RewriteRule ^serveurApplication/supprimerArticle/[0-9]+ serveurApplication.php?traitement=supprimerArticle&id=$1 [L]
 
+RewriteRule ^serveurApplication/ajouterArticle serveurApplication.php?traitement=ajouterArticle [L]	
