@@ -31,7 +31,7 @@ if ($bearer_token != null){
 								$matchingData = $sql -> getArticlesByUser($_GET['user'], $role);
 								break;
 							case 'article':
-								$matchingData = $sql -> getArticle($_GET['id']);
+								$matchingData = $sql -> getArticle($_GET['idArticle'], $role);
 								break;
 							case 'mesArticles':
 								$matchingData = $sql -> getArticlesByUser($payload -> login, $role);
@@ -47,13 +47,22 @@ if ($bearer_token != null){
 					break;
 				
 				case "POST":
-					/// Récupération des données envoyées par le Client
-					$postedData = file_get_contents('php://input');
-					$data = json_decode($postedData, true);
-					$auteur = $data['Auteur'];
-					$contenu = $data['Contenu'];
-					$sql -> insertArticle($auteur,$conteu);
-					deliver_response(201, "Ajout réussi", null);
+					if (!empty($_GET['traitement'])) {
+						$traitement = $_GET['traitement'];
+						switch ($traitement) {
+							case 'ajouterArticle':
+								$postedData = file_get_contents('php://input');
+								$data = json_decode($postedData, true);
+								$auteur = $payload -> login;
+								$contenu = $data['Contenu'];
+								$sql -> insertArticle($auteur, $contenu);
+								break;
+							default :
+								deliver_response(400, "Mauvaise requête", null);
+								break;
+						}
+					}
+					deliver_response(201, "Ajout réussi ", null);
 					break;
 
 				case "PUT":
@@ -86,7 +95,7 @@ if ($bearer_token != null){
 								$matchingData = $sql -> getArticlesByUser($_GET['user'], $role);
 								break;
 							case 'article':
-								$matchingData = $sql -> getArticle($_GET['id']);
+								$matchingData = $sql -> getArticle($_GET['idArticle'], $role);
 								break;
 							default:
 								deliver_response(400, "Mauvaise requête", NULL);
@@ -96,16 +105,6 @@ if ($bearer_token != null){
 						$matchingData = $sql -> getAllArticle($role);
 					}
 					deliver_response(200, "Bien affiché Moderator", $matchingData);
-					break;
-				
-				case "POST":
-					/// Récupération des données envoyées par le Client
-					$postedData = file_get_contents('php://input');
-					$data = json_decode($postedData, true);
-					$auteur = $data['Auteur'];
-					$contenu = $data['Contenu'];
-					$sql -> insertArticle($auteur,$conteu);
-					deliver_response(201, "Ajout réussi", NULL);
 					break;
 
 				case "PUT":
@@ -142,7 +141,7 @@ if ($bearer_token != null){
 					$matchingData = $sql -> getArticlesByUser($_GET['user']);
 					break;
 				case 'article':
-					$matchingData = $sql -> getArticle($_GET['id']);
+					$matchingData = $sql -> getArticle($_GET['idArticle']);
 					break;
 				default:
 					deliver_response(400, "Mauvaise requête", NULL);

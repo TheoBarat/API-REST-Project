@@ -91,14 +91,67 @@ class RequeteSQL {
         return $result;
     }
 
-    public function getArticle($idArticle)
+    public function getArticle($idArticle, $role = null)
     {
-        $req = $this->linkpdo->prepare("SELECT * FROM article where Id_Article = :idArticle");
-        $req->execute(array(
-            'idArticle' => $idArticle
-        ));
+        switch ($role) {
+            case "moderator":
+                $reqArticle = $this->linkpdo->prepare("SELECT article.id_article, article.date_publication, article.contenu, users.login FROM article, users WHERE article.id_user = users.id_user AND article.id_article = :idArticle");
+                $reqArticle->execute(array(
+                    'idArticle' => $idArticle
+                ));
+                $reqArticle = $reqArticle -> fetchAll(PDO::FETCH_ASSOC);
+                $result = array();
+                foreach ($reqArticle as $value) {
+                    $data = array(
+                        'Auteur' => $value['login'],
+                        'Date' => date('d/m/Y', strtotime($value['date_publication'])),
+                        'Contenu' => $value['contenu'],
+                        'NbLike' => $this-> getNbLike($value['id_article']),
+                        'UserLike' => $this-> getUserLike($value['id_article']),
+                        'NbDislike' => $this-> getNbDislike($value['id_article']),
+                        'UserDislike' => $this-> getUserDislike($value['id_article'])
+                    );
+                    array_push($result, $data); // ajoute le tableau $data au tableau $result
+                }
+                break;
+            
+            case "publisher":
+                $reqArticle = $this->linkpdo->prepare("SELECT article.id_article, article.date_publication, article.contenu, users.login FROM article, users WHERE article.id_user = users.id_user AND article.id_article = :idArticle");
+                $reqArticle -> execute(array(
+                    'idArticle' => $idArticle
+                ));
+                $reqArticle = $reqArticle -> fetchAll(PDO::FETCH_ASSOC);
+                $result = array();
+                foreach ($reqArticle as $value) {
+                    $data = array(
+                        'Auteur' => $value['login'],
+                        'Date' => date('d/m/Y', strtotime($value['date_publication'])),
+                        'Contenu' => $value['contenu'],
+                        'NbLike' => $this-> getNbLike($value['id_article']),
+                        'NbDislike' => $this-> getNbDislike($value['id_article'])
+                    );
+                    array_push($result, $data); // ajoute le tableau $data au tableau $result
+                }
+                break;
 
-        return $req->fetchAll(PDO::FETCH_ASSOC);
+            default :
+            $reqArticle = $this->linkpdo->prepare("SELECT article.id_article, article.date_publication, article.contenu, users.login FROM article, users WHERE article.id_user = users.id_user AND article.id_article = :idArticle");
+            $reqArticle -> execute(array(
+                'idArticle' => $idArticle
+            ));
+            $reqArticle = $reqArticle -> fetchAll(PDO::FETCH_ASSOC);
+            $result = array();
+            foreach ($reqArticle as $value) {
+                $data = array(
+                    'Auteur' => $value['login'],
+                    'Date' => date('d/m/Y', strtotime($value['date_publication'])),
+                    'Contenu' => $value['contenu']
+                );
+                array_push($result, $data); // ajoute le tableau $data au tableau $result
+            }
+            break;
+        }
+        return $result;
     }
 
     public function getArticlesByUser($loginUser, $role = null)
@@ -171,12 +224,11 @@ class RequeteSQL {
         return $req->fetchAll(PDO::FETCH_ASSOC);
     }
 
-    public function getUserId($username){
-        $req = $this->linkpdo->prepare("SELECT Id_User FROM `Users` WHERE Login = :username");
+    public function getIdUserByLogin($login){
+        $req = $this->linkpdo->prepare("SELECT Id_User FROM Users WHERE Login = :login");
         $req->execute(array(
-            'username' => $username
+            'login' => $login
         ));
-
         return $req->fetchAll(PDO::FETCH_ASSOC);
     }
     
@@ -216,19 +268,26 @@ class RequeteSQL {
     FONCTIONS D'AJOUT DANS LA BDD
     */
 
-    public function insertArticle($auteur,$contenu){
-        $req = $this->linkpdo->prepare('INSERT INTO chuckn_facts VALUES (NULL,:contenu,:,now(),:auteur)');
+    public function insertArticle($auteur, $contenu) {
+        $idAuteur = $this->getIdUserByLogin($auteur);
+        $req = $this->linkpdo->prepare('INSERT INTO article VALUES (NULL, :contenu, now(), :idAuteur)');
         $testreq = $req->execute(array(
-            'auteur' => $auteur,
-            'contenu' => $contenu
+            'contenu' => $contenu,
+            'idAuteur' => $idAuteur[0]['Id_User']
         ));
-        if ($testreq == false) {
+        if (!$testreq) {
             die("Erreur insertArticle");
         }
     }
 
     /*
     FONCTIONS DE MODIFICATION DANS LA BDD
+    */
+
+    
+
+    /*
+    FONCTION SUPPRIMER DE LA BDD
     */
 
     //fonction pour supprimer un article
@@ -243,10 +302,26 @@ class RequeteSQL {
             die("Erreur deleteArticle");
         }
 
+        $this->deleteInteragir($idArticle);
+    }
+
+    //on regarde si un article a des likes ou dislike dans la table interagir et si c'est le cas, on vide toute les lignes de la table interagir avec l'id de l'article
+    public function deleteInteragir($idArticle){
+        $req = $this->linkpdo->prepare("SELECT count(*) as nb FROM interagir WHERE id_article = :idArticle");
+        $req->execute(array(
+            'idArticle' => $idArticle
+        ));
+        $result = $req->fetchAll(PDO::FETCH_ASSOC);
+        if ($result[0] > 0) {
+            $req = $this->linkpdo->prepare("DELETE FROM interagir WHERE id_article = :idArticle");
+            $req->execute(array(
+                'idArticle' => $idArticle
+            ));
+        }
     }
 
     public function deleteArticlesUser($username){
-        $idUser = $this->getUserId($username);
+        $idUser = $this->getIdUserByLogin($username);
         //requete pour récuperer tous les articles d'un utilisateur
         $req = $this->linkpdo->prepare("SELECT id_article FROM article WHERE id_user = :idUser");
         $req->execute(array(
@@ -266,25 +341,6 @@ class RequeteSQL {
         }
 
     }
-
-    //on regarde si un article a des likes ou dislike dans la table interagir et si c'est le cas, on vide toute les lignes de la table interagir avec l'id de l'article
-    public function deleteInteragir($idArticle){
-        $req = $this->linkpdo->prepare("SELECT count(*) as nb FROM interagir WHERE id_article = :idArticle");
-        $req->execute(array(
-            'idArticle' => $idArticle
-        ));
-        $result = $req->fetchAll(PDO::FETCH_ASSOC);
-        if ($result[0] > 0) {
-            $req = $this->linkpdo->prepare("DELETE FROM interagir WHERE id_article = :idArticle");
-            $req->execute(array(
-                'idArticle' => $idArticle
-            ));
-        }
-    }
-
-    /*
-    FONCTION SUPPRIMER DE LA BDD
-    */
 
 }
 ?>
