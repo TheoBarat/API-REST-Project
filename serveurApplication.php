@@ -53,6 +53,11 @@ if ($bearer_token != null){
 							case 'ajouterArticle':
 								$postedData = file_get_contents('php://input');
 								$data = json_decode($postedData, true);
+								if ($data['Contenu'] == null) {
+									deliver_response(400, "Mauvaise requête", null);
+									exit;
+								}
+								
 								$auteur = $payload -> login;
 								$contenu = $data['Contenu'];
 								$sql -> insertArticle($auteur, $contenu);
