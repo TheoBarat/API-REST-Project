@@ -284,8 +284,94 @@ class RequeteSQL {
     FONCTIONS DE MODIFICATION DANS LA BDD
     */
 
-    
+    public function updateArticle($idArticle, $contenu){
+        $req = $this->linkpdo->prepare('UPDATE article SET contenu = :contenu WHERE Id_Article = :idArticle');
+        $testreq = $req->execute(array(
+            'contenu' => $contenu,
+            'idArticle' => $idArticle
+        ));
+        if (!$testreq) {
+            die("Erreur updateArticle");
+        }
+    }
 
+    public function likeArticle($idArticle, $idUser){
+        $req = $this -> linkpdo -> prepare('SELECT a_like FROM interagir WHERE id_article = :idArticle AND id_user = :idUser');
+        $req -> execute(array(
+            'idArticle' => $idArticle,
+            'idUser' => $idUser
+        ));
+        $req = $req -> fetchAll(PDO::FETCH_ASSOC);
+        if (count($req) > 0) {
+            $req = $this->linkpdo->prepare('UPDATE interagir SET a_like = 1 WHERE id_article = :idArticle AND id_user = :idUser');
+            $testreq = $req->execute(array(
+                'idArticle' => $idArticle,
+                'idUser' => $idUser
+            ));
+            if (!$testreq) {
+                die("Erreur likeArticle");
+            }
+        } else {
+            $req = $this->linkpdo->prepare('INSERT INTO interagir VALUES (:idUser, :idArticle,  1)');
+            $testreq = $req->execute(array(
+                'idArticle' => $idArticle,
+                'idUser' => $idUser
+            ));
+            if (!$testreq) {
+                die("Erreur likeArticle");
+            }
+        }
+    }
+
+    public function dislikeArticle($idArticle, $idUser) {
+        $req = $this -> linkpdo -> prepare('SELECT a_like FROM interagir WHERE id_article = :idArticle AND id_user = :idUser');
+        $req -> execute(array(
+            'idArticle' => $idArticle,
+            'idUser' => $idUser
+        ));
+        $req = $req -> fetchAll(PDO::FETCH_ASSOC);
+        if (count($req) > 0) {
+            $req = $this->linkpdo->prepare('UPDATE interagir SET a_like = 1 WHERE id_article = :idArticle AND id_user = :idUser');
+            $testreq = $req->execute(array(
+                'idArticle' => $idArticle,
+                'idUser' => $idUser
+            ));
+            if (!$testreq) {
+                die("Erreur likeArticle");
+            }
+        } else {
+            $req = $this->linkpdo->prepare('INSERT INTO interagir VALUES (:idUser, :idArticle, -1)');
+            $testreq = $req->execute(array(
+                'idArticle' => $idArticle,
+                'idUser' => $idUser
+            ));
+            if (!$testreq) {
+                die("Erreur dislikeArticle");
+            }
+        }
+    }
+
+    public function removeLikeArticle($idArticle, $idUser){
+        $req = $this->linkpdo->prepare('DELETE FROM interagir WHERE id_article = :idArticle AND id_user = :idUser AND a_like = 1');
+        $testreq = $req->execute(array(
+            'idArticle' => $idArticle,
+            'idUser' => $idUser
+        ));
+        if (!$testreq) {
+            die("Erreur enleverLike");
+        }
+    }
+
+    public function removeDislikeArticle($idArticle, $idUser){
+        $req = $this->linkpdo->prepare('DELETE FROM interagir WHERE id_article = :idArticle AND id_user = :idUser AND a_like = -1');
+        $testreq = $req->execute(array(
+            'idArticle' => $idArticle,
+            'idUser' => $idUser
+        ));
+        if (!$testreq) {
+            die("Erreur enleverDislike");
+        }
+    }
     /*
     FONCTION SUPPRIMER DE LA BDD
     */

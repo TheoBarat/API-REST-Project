@@ -70,10 +70,53 @@ if ($bearer_token != null){
 					deliver_response(201, "Ajout réussi ", null);
 					break;
 
-				case "PUT":
-					/// Récupération des données envoyées par le Client
+				case "PATCH": //Modification d'un article
 					$postedData = file_get_contents('php://input');
-					break;
+					$data = json_decode($postedData, true);
+					$idUser = $payload -> login;
+
+					$traitement = $_GET['traitement'];
+					switch ($traitement) {
+						case "modifierArticle":
+							if (!(isset($data['Contenu']))) {
+								deliver_response(400, "Paramètre inconnu", null);
+								exit;
+							}
+							$idArticle = $_GET['idArticle'];
+							$contenu = $data['Contenu'];
+							$sql -> updateArticle($idArticle, $contenu);
+							deliver_response(200, "Modification réussie", null);
+							break;
+						
+						case "likerArticle":
+							$idArticle = $_GET['idArticle'];
+							$sql -> likeArticle($idArticle, $idUser);
+							deliver_response(200, "Like réussi", null);
+							break;
+						
+						case "dislikerArticle":
+							$idArticle = $_GET['idArticle'];
+							$sql -> dislikeArticle($idArticle, $idUser);
+							deliver_response(200, "Dislike réussi", null);
+							break;
+
+						case "enleverLike":
+							$idArticle = $_GET['idArticle'];
+							$sql -> removeLikeArticle($idArticle, $idUser);
+							deliver_response(200, "Like retiré", null);
+							break;
+						
+						case "enleverDislike":
+							$idArticle = $_GET['idArticle'];
+							$sql -> removeDislikeArticle($idArticle, $idUser);
+							deliver_response(200, "Dislike retiré", null);
+							break;
+
+						default :
+							deliver_response(400, "Mauvaise requête", null);
+							break;
+					}
+					
 
 				case "DELETE":
 					if ($_GET['traitement'] == "supprimerMesArticles") {
@@ -110,11 +153,6 @@ if ($bearer_token != null){
 						$matchingData = $sql -> getAllArticle($role);
 					}
 					deliver_response(200, "Bien affiché Moderator", $matchingData);
-					break;
-
-				case "PUT":
-					/// Récupération des données envoyées par le Client
-					$postedData = file_get_contents('php://input');
 					break;
 
 				case "DELETE":

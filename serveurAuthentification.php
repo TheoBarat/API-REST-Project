@@ -19,7 +19,7 @@ switch ($http_method) {
 		$login = $users['login'];
         $password = $users['password'];
 		$role = $users['role'];
-		if($sql->getConnection($login,$password,$role)){
+		if ($sql->getConnection($login,$password,$role)) {
             $headers = array(
                 'alg' => 'HS256',
                 'typ' => 'JWT'

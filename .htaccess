@@ -4,12 +4,20 @@ RewriteRule ^serveurApplication/articles serveurApplication.php [L]
 
 RewriteRule ^serveurApplication/author/([a-zA-Z]+) serveurApplication.php?traitement=author&user=$1 [L]
 
-RewriteRule ^serveurApplication/mesArticles serveurApplication.php?traitement=mesArticles [L]
-
 RewriteRule ^serveurApplication/article/([0-9]+) serveurApplication.php?traitement=article&idArticle=$1 [L]
 
 RewriteRule ^serveurApplication/supprimerArticle/([0-9]+) serveurApplication.php?traitement=supprimerArticle&id=$1 [L]
 
-RewriteRule ^serveurApplication/supprimerMesArticles serveurApplication.php?traitement=supprimerMesArticles [L]
+RewriteRule ^serveurApplication/mesArticles serveurApplication.php?traitement=mesArticles [L]
 
-RewriteRule ^serveurApplication/ajouterArticle serveurApplication.php?traitement=ajouterArticle [L]	
+RewriteRule ^serveurApplication/ajouterArticle serveurApplication.php?traitement=ajouterArticle [L]
+
+RewriteRule ^serveurApplication/supprimerMesArticles serveurApplication.php?traitement=supprimerMesArticles [L]	
+
+RewriteRule ^serveurApplication/likerArticle/([0-9]+) serveurApplication.php?traitement=likerArticle&idArticle=$1 [L]
+
+RewriteRule ^serveurApplication/dislikerArticle/([0-9]+) serveurApplication.php?traitement=dislikerArticle&idArticle=$1 [L]
+
+RewriteRule ^serveurApplication/enleverLike serveurApplication.php?traitement=enleverLike [L]
+
+RewriteRule ^serveurApplication/enleverDislike serveurApplication.php?traitement=enleverDislike [L]
