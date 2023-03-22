@@ -20,6 +20,7 @@ if ($bearer_token != null){
 		$payload = get_payload($bearer_token);
 		$role = $payload->role;
 
+		/// Fonctionnalités du rôle publisher
 		if ($role == "publisher") {
 			switch ($http_method) {
 				case "GET":
@@ -37,37 +38,30 @@ if ($bearer_token != null){
 								$matchingData = $sql -> getArticlesByUser($payload -> login, $role);
 								break;
 							default:
-								deliver_response(400, "Mauvaise requête", null);
+								deliver_response(400, "Fonctionnalitée non autorisée ou inexistante", null);
 								exit;
 						}
 					} else {
 						$matchingData = $sql -> getAllArticle($role);
 					}
-					deliver_response(200, "Bien affiché", $matchingData);
+					deliver_response(200, "Bien affiché Publisher", $matchingData);
 					break;
 				
 				case "POST":
-					if (!empty($_GET['traitement'])) {
-						$traitement = $_GET['traitement'];
-						switch ($traitement) {
-							case 'ajouterArticle':
-								$postedData = file_get_contents('php://input');
-								$data = json_decode($postedData, true);
-								if (!(isset($data['Contenu']))) {
-									deliver_response(400, "Paramètre inconnu", null);
-									exit;
-								}
-
-								$auteur = $payload -> login;
-								$contenu = $data['Contenu'];
-								$sql -> insertArticle($auteur, $contenu);
-								break;
-							default :
-								deliver_response(400, "Mauvaise requête", null);
-								break;
+					if ($_GET['traitement'] == "ajouterArticle") {
+						$postedData = file_get_contents('php://input');
+						$data = json_decode($postedData, true);
+						if (!(isset($data['Contenu']))) {
+							deliver_response(400, "Paramètre inconnu", null);
+							exit;
 						}
+						$auteur = $payload -> login;
+						$contenu = $data['Contenu'];
+						$sql -> insertArticle($auteur, $contenu);
+						deliver_response(201, "Ajout réussi ", null);
+					} else {
+						deliver_response(400, "Fonctionnalitée non autorisée ou inexistante", null);
 					}
-					deliver_response(201, "Ajout réussi ", null);
 					break;
 
 				case "PATCH": //Modification d'un article
@@ -121,17 +115,18 @@ if ($bearer_token != null){
 				case "DELETE":
 					if ($_GET['traitement'] == "supprimerMesArticles") {
 						$sql ->deleteArticlesUser($payload -> login);
-						deliver_response(200, "Bien supprimé", NULL);
+						deliver_response(200, "Bien supprimé Publisher", NULL);
 					} else {
-						deliver_response(400, "Mauvaise requête", NULL);
+						deliver_response(400, "Fonctionnalitée non autorisée ou inexistante", null);
 					}
 					break;
 
 				default:
-					/// Envoi de la réponse au Client
 					deliver_response(405, "Méthode non supportée", null);
 					break;
 			}
+			 
+		/// Fonctionnalités du rôle moderator
 		} elseif ($role == "moderator") {
 			switch ($http_method) {
 
@@ -146,7 +141,7 @@ if ($bearer_token != null){
 								$matchingData = $sql -> getArticle($_GET['idArticle'], $role);
 								break;
 							default:
-								deliver_response(400, "Mauvaise requête", NULL);
+								deliver_response(400, "Fonctionnalitée non autorisée ou inexistante", null);
 								exit;
 						}
 					} else {
@@ -159,19 +154,19 @@ if ($bearer_token != null){
 					/// Récupération de l'identifiant de la ressource envoyé par le Client
 					if ($_GET['traitement'] == "supprimerArticle") {
 						$sql ->deleteArticle($_GET['id']);
-						deliver_response(200, "Bien supprimé", NULL);
+						deliver_response(200, "Bien supprimé Moderator", NULL);
 					} else {
-						deliver_response(400, "Mauvaise requête", NULL);
+						deliver_response(400, "Fonctionnalitée non autorisée ou inexistante", null);
 					}
 					break;
 
 				default:
-					/// Envoi de la réponse au Client
 					deliver_response(405, "Méthode non supportée", NULL);
 					break;
 			}
 		}
-	} else { // Si le token n'est pas valide
+	// Si le token n'est pas valide
+	} else {
 		deliver_response(401, "Token invalide", NULL);
 	}
 
@@ -187,15 +182,14 @@ if ($bearer_token != null){
 					$matchingData = $sql -> getArticle($_GET['idArticle']);
 					break;
 				default:
-					deliver_response(400, "Mauvaise requête", NULL);
+					deliver_response(400, "Fonctionnalitée non autorisée ou inexistante", null);
 					exit;
 			}
 		} else {
         	$matchingData = $sql->getAllArticle(); //Consulter les messages existants (auteur, date de publication, contenu)
 		}
-        deliver_response(200, "Bien affiché user", $matchingData); /// Envoi de la réponse au Client
+        deliver_response(200, "Bien affiché User", $matchingData); 
     } else {
-        /// Envoi de la réponse au Client
         deliver_response(405, "Méthode non supportée", NULL);
     }
 }
