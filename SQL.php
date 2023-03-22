@@ -250,7 +250,7 @@ class RequeteSQL {
         //requete pour récuperer tous les articles d'un utilisateur
         $req = $this->linkpdo->prepare("SELECT id_article FROM article WHERE id_user = :idUser");
         $req->execute(array(
-            'idUser' => $idUser
+            'idUser' => $idUser[0]['Id_User']
         ));
         //on crée une boucle et tant qu'il reste un article, on supprime les likes et dislikes de l'article
         while ($result = $req->fetchAll(PDO::FETCH_ASSOC)) {
@@ -259,7 +259,7 @@ class RequeteSQL {
 
         $req = $this->linkpdo->prepare('DELETE FROM article WHERE Id_User = :idUser');
         $testreq = $req->execute(array(
-            'idUser' => $idUser
+            'idUser' => $idUser[0]['Id_User']
         ));
         if ($testreq == false) {
             die("Erreur deleteArticle");

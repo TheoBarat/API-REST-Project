@@ -63,7 +63,7 @@ if ($bearer_token != null){
 
 				case "DELETE":
 					if ($_GET['traitement'] == "supprimerMesArticles") {
-						$sql ->deleteArticle($payload -> login);
+						$sql ->deleteArticlesUser($payload -> login);
 						deliver_response(200, "Bien supprimé", NULL);
 					} else {
 						deliver_response(400, "Mauvaise requête", NULL);
