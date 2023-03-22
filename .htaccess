@@ -1,6 +1,6 @@
 RewriteEngine On
 
-RewriteRule ^serveurApplication/Articles serveurApplication.php [L]
+RewriteRule ^serveurApplication/articles serveurApplication.php [L]
 
 RewriteRule ^serveurApplication/author/([a-zA-Z]+) serveurApplication.php?traitement=author&user=$1 [L]
 

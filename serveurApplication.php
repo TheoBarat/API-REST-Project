@@ -53,11 +53,11 @@ if ($bearer_token != null){
 							case 'ajouterArticle':
 								$postedData = file_get_contents('php://input');
 								$data = json_decode($postedData, true);
-								if ($data['Contenu'] == null) {
-									deliver_response(400, "Mauvaise requête", null);
+								if (!(isset($data['Contenu']))) {
+									deliver_response(400, "Paramètre inconnu", null);
 									exit;
 								}
-								
+
 								$auteur = $payload -> login;
 								$contenu = $data['Contenu'];
 								$sql -> insertArticle($auteur, $contenu);
@@ -120,7 +120,7 @@ if ($bearer_token != null){
 				case "DELETE":
 					/// Récupération de l'identifiant de la ressource envoyé par le Client
 					if ($_GET['traitement'] == "supprimerArticle") {
-						$sql ->deleteArticle($GET_['id']);
+						$sql ->deleteArticle($_GET['id']);
 						deliver_response(200, "Bien supprimé", NULL);
 					} else {
 						deliver_response(400, "Mauvaise requête", NULL);
