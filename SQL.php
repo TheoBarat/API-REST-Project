@@ -233,7 +233,7 @@ class RequeteSQL {
     }
     
     public function getUserLike($id_Article){
-        $req = $this -> linkpdo -> prepare ("SELECT users.login FROM interagir, users WHERE interagir.id_user = users.id_user AND interagir.id_article = :idArticle AND interagir.a_like = 1");
+        $req = $this -> linkpdo -> prepare("SELECT users.login FROM interagir, users WHERE interagir.id_user = users.id_user AND interagir.id_article = :idArticle AND interagir.a_like = 1");
         $req -> execute(array(
             'idArticle' => $id_Article
         ));
@@ -262,6 +262,33 @@ class RequeteSQL {
             'idArticle' => $id_Article
         ));
         return $req->fetchAll(PDO::FETCH_ASSOC)[0]['COUNT(*)'];
+    }
+
+    public function isLike($id_Article, $id_User){
+        $req = $this->linkpdo->prepare("SELECT count(*) FROM interagir WHERE id_article = :idArticle AND id_user = :idUser AND a_like = 1");
+        $req->execute(array(
+            'idArticle' => $id_Article,
+            'idUser' => $id_User
+        ));
+        $req = $req->fetchAll(PDO::FETCH_ASSOC)[0]['count(*)'];
+        if ($req > 0){
+            return true;
+        }
+        return false;
+    }
+
+    public function isDislike($id_Article, $id_User){
+        $req = $this->linkpdo->prepare("SELECT count(*) FROM interagir WHERE id_article = :idArticle AND id_user = :idUser AND a_like = -1");
+        $req->execute(array(
+            'idArticle' => $id_Article,
+            'idUser' => $id_User
+        ));
+        $req = $req->fetchAll(PDO::FETCH_ASSOC)[0]['count(*)'];
+        if ($req > 0){
+            return true;
+        } else {
+            return false;
+        }
     }
 
     /*
@@ -331,7 +358,7 @@ class RequeteSQL {
         ));
         $req = $req -> fetchAll(PDO::FETCH_ASSOC);
         if (count($req) > 0) {
-            $req = $this->linkpdo->prepare('UPDATE interagir SET a_like = 1 WHERE id_article = :idArticle AND id_user = :idUser');
+            $req = $this->linkpdo->prepare('UPDATE interagir SET a_like = -1 WHERE id_article = :idArticle AND id_user = :idUser');
             $testreq = $req->execute(array(
                 'idArticle' => $idArticle,
                 'idUser' => $idUser

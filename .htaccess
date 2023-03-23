@@ -14,10 +14,12 @@ RewriteRule ^serveurApplication/ajouterArticle serveurApplication.php?traitement
 
 RewriteRule ^serveurApplication/supprimerMesArticles serveurApplication.php?traitement=supprimerMesArticles [L]	
 
-RewriteRule ^serveurApplication/likerArticle/([0-9]+) serveurApplication.php?traitement=likerArticle&idArticle=$1 [L]
+RewriteRule ^serveurApplication/ajouterLikeArticle/([0-9]+) serveurApplication.php?traitement=ajouterLikeArticle&idArticle=$1 [L]
 
-RewriteRule ^serveurApplication/dislikerArticle/([0-9]+) serveurApplication.php?traitement=dislikerArticle&idArticle=$1 [L]
+RewriteRule ^serveurApplication/ajouterDislikeArticle/([0-9]+) serveurApplication.php?traitement=ajouterDislikeArticle&idArticle=$1 [L]
 
-RewriteRule ^serveurApplication/enleverLike serveurApplication.php?traitement=enleverLike [L]
+RewriteRule ^serveurApplication/enleverLikeArticle/([0-9]+) serveurApplication.php?traitement=enleverLikeArticle&idArticle=$1 [L]
 
-RewriteRule ^serveurApplication/enleverDislike serveurApplication.php?traitement=enleverDislike [L]
+RewriteRule ^serveurApplication/enleverDislikeArticle/([0-9]+) serveurApplication.php?traitement=enleverDislikeArticle&idArticle=$1 [L]
+
+RewriteRule ^serveurApplication/modifierArticle/([0-9]+) serveurApplication.php?traitement=modifierArticle&idArticle=$1 [L]

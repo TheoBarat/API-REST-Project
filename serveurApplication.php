@@ -67,7 +67,9 @@ if ($bearer_token != null){
 				case "PATCH": //Modification d'un article
 					$postedData = file_get_contents('php://input');
 					$data = json_decode($postedData, true);
-					$idUser = $payload -> login;
+					$login = $payload -> login;
+					$idUser = $sql -> getIdUserByLogin($login)[0]['Id_User'];
+					$idArticle = $_GET['idArticle'];
 
 					$traitement = $_GET['traitement'];
 					switch ($traitement) {
@@ -76,41 +78,51 @@ if ($bearer_token != null){
 								deliver_response(400, "Paramètre inconnu", null);
 								exit;
 							}
-							$idArticle = $_GET['idArticle'];
 							$contenu = $data['Contenu'];
 							$sql -> updateArticle($idArticle, $contenu);
 							deliver_response(200, "Modification réussie", null);
-							break;
+							exit;
 						
-						case "likerArticle":
-							$idArticle = $_GET['idArticle'];
+						case "ajouterLikeArticle":
+							if ($sql -> isLike($idArticle, $idUser)){
+								deliver_response(400, "Vous avez déjà liké cet article", null);
+								exit;
+							}
 							$sql -> likeArticle($idArticle, $idUser);
 							deliver_response(200, "Like réussi", null);
-							break;
+							exit;
 						
-						case "dislikerArticle":
-							$idArticle = $_GET['idArticle'];
+						case "ajouterDislikeArticle":
+							if ($sql -> isDisLike($idArticle, $idUser)){
+								deliver_response(400, "Vous avez déjà disliké cet article", null);
+								exit;
+							}
 							$sql -> dislikeArticle($idArticle, $idUser);
 							deliver_response(200, "Dislike réussi", null);
-							break;
+							exit;
 
-						case "enleverLike":
-							$idArticle = $_GET['idArticle'];
+						case "enleverLikeArticle":
+							if (!($sql -> isLike($idArticle, $idUser))){
+								deliver_response(400, "Vous n'avez pas liké cet article", null);
+								exit;
+							}
 							$sql -> removeLikeArticle($idArticle, $idUser);
 							deliver_response(200, "Like retiré", null);
-							break;
+							exit;
 						
-						case "enleverDislike":
-							$idArticle = $_GET['idArticle'];
+						case "enleverDislikeArticle":
+							if (!($sql -> isDislike($idArticle, $idUser))){
+								deliver_response(400, "Vous n'avez pas disliké cet article", null);
+								exit;
+							}
 							$sql -> removeDislikeArticle($idArticle, $idUser);
 							deliver_response(200, "Dislike retiré", null);
-							break;
+							exit;
 
 						default :
 							deliver_response(400, "Mauvaise requête", null);
-							break;
+							exit;
 					}
-					
 
 				case "DELETE":
 					if ($_GET['traitement'] == "supprimerMesArticles") {
