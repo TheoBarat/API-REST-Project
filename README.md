@@ -25,13 +25,3 @@ METHODE DELETE
 
 °deleteArticle : http://35.204.89.58/iutapi/supprimerArticle/#idArticle
 
-
-Voici les différents utilisateurs de notre blog :
-2 Moderators :
-°Login : youngway | Mdp : iutinfo
-°Login : administrator | Mdp : iutinfo
-
-3 Publishers :
-°Login : theo | Mdp : iutinfo
-°Login : titouan | Mdp : iutinfo
-°Login : baptiste | Mdp : iutinfo
