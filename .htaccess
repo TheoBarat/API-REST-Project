@@ -1,25 +1,27 @@
 RewriteEngine On
 
-RewriteRule ^serveurApplication/articles serveurApplication.php [L]
+RewriteRule ^authentifier serveurAuthentification.php [L]
 
-RewriteRule ^serveurApplication/author/([a-zA-Z]+) serveurApplication.php?traitement=author&user=$1 [L]
+RewriteRule ^articles serveurApplication.php [L]
 
-RewriteRule ^serveurApplication/article/([0-9]+) serveurApplication.php?traitement=article&idArticle=$1 [L]
+RewriteRule ^author/([a-zA-Z]+) serveurApplication.php?traitement=author&user=$1 [L]
 
-RewriteRule ^serveurApplication/supprimerArticle/([0-9]+) serveurApplication.php?traitement=supprimerArticle&id=$1 [L]
+RewriteRule ^article/([0-9]+) serveurApplication.php?traitement=article&idArticle=$1 [L]
 
-RewriteRule ^serveurApplication/mesArticles serveurApplication.php?traitement=mesArticles [L]
+RewriteRule ^supprimerArticle/([0-9]+) serveurApplication.php?traitement=supprimerArticle&idArticle=$1 [L]
 
-RewriteRule ^serveurApplication/ajouterArticle serveurApplication.php?traitement=ajouterArticle [L]
+RewriteRule ^mesArticles serveurApplication.php?traitement=mesArticles [L]
 
-RewriteRule ^serveurApplication/supprimerMesArticles serveurApplication.php?traitement=supprimerMesArticles [L]	
+RewriteRule ^ajouterArticle serveurApplication.php?traitement=ajouterArticle [L]
 
-RewriteRule ^serveurApplication/ajouterLikeArticle/([0-9]+) serveurApplication.php?traitement=ajouterLikeArticle&idArticle=$1 [L]
+RewriteRule ^supprimerMesArticles serveurApplication.php?traitement=supprimerMesArticles [L]	
 
-RewriteRule ^serveurApplication/ajouterDislikeArticle/([0-9]+) serveurApplication.php?traitement=ajouterDislikeArticle&idArticle=$1 [L]
+RewriteRule ^ajouterLikeArticle/([0-9]+) serveurApplication.php?traitement=ajouterLikeArticle&idArticle=$1 [L]
 
-RewriteRule ^serveurApplication/enleverLikeArticle/([0-9]+) serveurApplication.php?traitement=enleverLikeArticle&idArticle=$1 [L]
+RewriteRule ^ajouterDislikeArticle/([0-9]+) serveurApplication.php?traitement=ajouterDislikeArticle&idArticle=$1 [L]
 
-RewriteRule ^serveurApplication/enleverDislikeArticle/([0-9]+) serveurApplication.php?traitement=enleverDislikeArticle&idArticle=$1 [L]
+RewriteRule ^enleverLikeArticle/([0-9]+) serveurApplication.php?traitement=enleverLikeArticle&idArticle=$1 [L]
 
-RewriteRule ^serveurApplication/modifierArticle/([0-9]+) serveurApplication.php?traitement=modifierArticle&idArticle=$1 [L]
+RewriteRule ^enleverDislikeArticle/([0-9]+) serveurApplication.php?traitement=enleverDislikeArticle&idArticle=$1 [L]
+
+RewriteRule ^modifierArticle/([0-9]+) serveurApplication.php?traitement=modifierArticle&idArticle=$1 [L]

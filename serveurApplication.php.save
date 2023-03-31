@@ -1,4 +1,3 @@
-
 <?php
 /// Librairies éventuelles (pour la connexion à la BDD, etc.)
 require_once('jwt_utils.php');
@@ -196,14 +195,14 @@ if ($bearer_token != null){
 					break;
 
 				case "DELETE":
-					$idArticle = $_GET['idArticle'];
 					/// Récupération de l'identifiant de la ressource envoyé par le Client
-					if ($_GET['traitement'] == "supprimerArticle") {
+					
+if ($_GET['traitement'] == "supprimerArticle") {
 						if (!($sql -> articleExist($idArticle))) {
-							deliver_response(404, "Article inexistant", null);
+							deliver_response(404, "Article inexistante", null);
 							exit;
 						} else {
-							$sql ->deleteArticle($idArticle);
+							$sql ->deleteArticle($_GET['id']);
 							deliver_response(204, "Article supprimé avec succès", null);
 							exit;
 						}

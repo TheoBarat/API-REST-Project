@@ -26,7 +26,7 @@ class RequeteSQL {
     */
 
     public function getConnection($login,$password,$role){
-        $req = $this->linkpdo->prepare("SELECT * FROM `Users` WHERE login = :login AND password = :password AND role = :role");
+        $req = $this->linkpdo->prepare("SELECT * FROM `users` WHERE login = :login AND password = :password AND role = :role");
         $req->execute(array(
             'login' => $login,
             'password' => $password,
@@ -46,6 +46,7 @@ class RequeteSQL {
                 $result = array();
                 foreach ($reqArticle as $value) {
                     $data = array(
+                        'ArticleID' => $value['id_article'],
                         'Auteur' => $value['login'],
                         'Date' => date('d/m/Y', strtotime($value['date_publication'])),
                         'Contenu' => $value['contenu'],
@@ -64,6 +65,7 @@ class RequeteSQL {
                 $result = array();
                 foreach ($reqArticle as $value) {
                     $data = array(
+                        'ArticleID' => $value['id_article'],
                         'Auteur' => $value['login'],
                         'Date' => date('d/m/Y', strtotime($value['date_publication'])),
                         'Contenu' => $value['contenu'],
@@ -216,7 +218,7 @@ class RequeteSQL {
     }
 
     public function getUsername($idUser){
-        $req = $this->linkpdo->prepare("SELECT Login FROM `Users` WHERE Id_User = :idUser");
+        $req = $this->linkpdo->prepare("SELECT Login FROM `users` WHERE Id_User = :idUser");
         $req->execute(array(
             'idUser' => $idUser
         ));
@@ -225,7 +227,7 @@ class RequeteSQL {
     }
 
     public function getIdUserByLogin($login){
-        $req = $this->linkpdo->prepare("SELECT Id_User FROM Users WHERE Login = :login");
+        $req = $this->linkpdo->prepare("SELECT Id_User FROM users WHERE Login = :login");
         $req->execute(array(
             'login' => $login
         ));
@@ -249,7 +251,7 @@ class RequeteSQL {
     }
 
     public function getNbLike($id_Article){
-        $req = $this->linkpdo->prepare("SELECT COUNT(*) FROM interagir WHERE interagir.id_article = :idArticle AND a_like = 1");
+        $req = $this->linkpdo->prepare("SELECT COUNT(*) FROM interagir WHERE interagir.iD_Article = :idArticle AND a_like = 1");
         $req->execute(array(
             'idArticle' => $id_Article
         ));
@@ -257,7 +259,7 @@ class RequeteSQL {
     }
 
     public function getNbDislike($id_Article){
-        $req = $this->linkpdo->prepare("SELECT COUNT(*) FROM interagir WHERE interagir.id_article = :idArticle AND a_like = -1");
+        $req = $this->linkpdo->prepare("SELECT COUNT(*) FROM interagir WHERE interagir.iD_Article = :idArticle AND a_like = -1");
         $req->execute(array(
             'idArticle' => $id_Article
         ));
@@ -265,7 +267,7 @@ class RequeteSQL {
     }
 
     public function isLike($id_Article, $id_User){
-        $req = $this->linkpdo->prepare("SELECT count(*) FROM interagir WHERE id_article = :idArticle AND id_user = :idUser AND a_like = 1");
+        $req = $this->linkpdo->prepare("SELECT count(*) FROM interagir WHERE iD_Article = :idArticle AND id_user = :idUser AND a_like = 1");
         $req->execute(array(
             'idArticle' => $id_Article,
             'idUser' => $id_User
@@ -278,7 +280,7 @@ class RequeteSQL {
     }
 
     public function isDislike($id_Article, $id_User){
-        $req = $this->linkpdo->prepare("SELECT count(*) FROM interagir WHERE id_article = :idArticle AND id_user = :idUser AND a_like = -1");
+        $req = $this->linkpdo->prepare("SELECT count(*) FROM interagir WHERE iD_Article = :idArticle AND id_user = :idUser AND a_like = -1");
         $req->execute(array(
             'idArticle' => $id_Article,
             'idUser' => $id_User
@@ -289,6 +291,15 @@ class RequeteSQL {
         } else {
             return false;
         }
+    }
+
+    public function articleExist($idArticle){
+        $req = $this->linkpdo->prepare("SELECT count(*) FROM article WHERE iD_Article = :idArticle");
+        $req->execute(array(
+            'idArticle' => $idArticle
+        ));
+        $req = $req->fetchAll(PDO::FETCH_ASSOC)[0]['count(*)'];
+        return $req > 0;
     }
 
     /*
@@ -323,6 +334,15 @@ class RequeteSQL {
     }
 
     public function likeArticle($idArticle, $idUser){
+        // Vérifie si l'article existe
+        $req = $this -> linkpdo -> prepare ("SELECT count(*) FROM article WHERE id_article = :idArticle");
+        $req -> execute(array(
+            'idArticle' => $idArticle
+        ));
+        if ($req -> fetchAll(PDO::FETCH_ASSOC)[0]['count(*)'] == 0){
+            return 0;
+        }
+
         $req = $this -> linkpdo -> prepare('SELECT a_like FROM interagir WHERE id_article = :idArticle AND id_user = :idUser');
         $req -> execute(array(
             'idArticle' => $idArticle,
@@ -348,9 +368,19 @@ class RequeteSQL {
                 die("Erreur likeArticle");
             }
         }
+        return 1;
     }
 
     public function dislikeArticle($idArticle, $idUser) {
+        // Vérifie si l'article existe
+        $req = $this -> linkpdo -> prepare ("SELECT count(*) FROM article WHERE id_article = :idArticle");
+        $req -> execute(array(
+            'idArticle' => $idArticle
+        ));
+        if ($req -> fetchAll(PDO::FETCH_ASSOC)[0]['count(*)'] == 0){
+            return 0;
+        }
+
         $req = $this -> linkpdo -> prepare('SELECT a_like FROM interagir WHERE id_article = :idArticle AND id_user = :idUser');
         $req -> execute(array(
             'idArticle' => $idArticle,
@@ -376,6 +406,7 @@ class RequeteSQL {
                 die("Erreur dislikeArticle");
             }
         }
+        return 1;
     }
 
     public function removeLikeArticle($idArticle, $idUser){
@@ -406,6 +437,15 @@ class RequeteSQL {
     //fonction pour supprimer un article
     public function deleteArticle($idArticle){
         $this->deleteInteragir($idArticle);
+        
+        //Test si l'article existe
+        $req = $this -> linkpdo -> prepare ('SELECT count(*) FROM article WHERE Id_Article = :idArticle');
+        $req -> execute(array(
+            'idArticle' => $idArticle
+        ));
+        if ($req -> fetchAll(PDO::FETCH_ASSOC)[0]['count(*)'] == 0){
+            return 0;
+        }
 
         $req = $this->linkpdo->prepare('DELETE FROM article WHERE Id_Article = :idArticle');
         $testreq = $req->execute(array(
@@ -414,8 +454,8 @@ class RequeteSQL {
         if ($testreq == false) {
             die("Erreur deleteArticle");
         }
-
-        $this->deleteInteragir($idArticle);
+        return 1;
+        // $this->deleteInteragir($idArticle);
     }
 
     //on regarde si un article a des likes ou dislike dans la table interagir et si c'est le cas, on vide toute les lignes de la table interagir avec l'id de l'article
