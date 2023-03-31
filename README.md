@@ -1,6 +1,6 @@
 # API-REST-Project
 
-URL d’accès à notre backend : (Pour plus d'informations sur les accès par rapports aux utilisateurs, veuillez voir le rapport, sous-titre "S'authentifier")
+URL d’accès à notre backend : (Afin de ne pas dévoiler les mots de passes pour se connecter à notre API, veuillez voir le rapport au sous-titre "S'authentifier" pour avoir plus d'informations sur les accès utilisateurs)
 
 Requête GET
 
