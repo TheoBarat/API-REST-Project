@@ -1,0 +1,757 @@
+{
+	"info": {
+		"_postman_id": "c85851ef-8175-475e-b6f0-1f99e6a938bb",
+		"name": "Barat_Tsan_ProjetR401",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "25745418"
+	},
+	"item": [
+		{
+			"name": "Requêtes supplémentaire",
+			"item": [
+				{
+					"name": "[Moderator] Récupérer tous les articles",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJsb2dpbiI6ImFkbWluaXN0cmF0b3IiLCJyb2xlIjoibW9kZXJhdG9yIiwiZXhwIjoxNjg4ODU1MDcxfQ.MoS3RnVnbCCacxlqDBp8Nc4MsDiI6SHdIDOI9phCqtE",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [
+							{
+								"key": "bearer",
+								"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJsb2dpbiI6InlvdW5nd2F5Iiwicm9sZSI6Im1vZGVyYXRvciIsImV4cCI6MTY4MjQwNzYyOH0.kI73xk-MXighONfjW-D-fFh-50XeoRiI-77JoLvgXDI",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "http://35.204.89.58/iutapi/articles",
+							"protocol": "http",
+							"host": [
+								"35",
+								"204",
+								"89",
+								"58"
+							],
+							"path": [
+								"iutapi",
+								"articles"
+							],
+							"query": [
+								{
+									"key": "bearer",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJsb2dpbiI6InlvdW5nd2F5Iiwicm9sZSI6Im1vZGVyYXRvciIsImV4cCI6MTY4MjQwOTMzMX0.gjc3wTLmgban3P_K6knj_3AX0vkkrwSAlBkBz_QmllE",
+									"disabled": true
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "[Moderator] Récupérer l'article correspond à l'id 25",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJsb2dpbiI6ImFkbWluaXN0cmF0b3IiLCJyb2xlIjoibW9kZXJhdG9yIiwiZXhwIjoxNjg4ODU1MDcxfQ.MoS3RnVnbCCacxlqDBp8Nc4MsDiI6SHdIDOI9phCqtE",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [
+							{
+								"key": "bearer",
+								"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJsb2dpbiI6InlvdW5nd2F5Iiwicm9sZSI6Im1vZGVyYXRvciIsImV4cCI6MTY4MjQwNzYyOH0.kI73xk-MXighONfjW-D-fFh-50XeoRiI-77JoLvgXDI",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "http://35.204.89.58/iutapi/article/2",
+							"protocol": "http",
+							"host": [
+								"35",
+								"204",
+								"89",
+								"58"
+							],
+							"path": [
+								"iutapi",
+								"article",
+								"2"
+							],
+							"query": [
+								{
+									"key": "bearer",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJsb2dpbiI6InlvdW5nd2F5Iiwicm9sZSI6Im1vZGVyYXRvciIsImV4cCI6MTY4MjQwOTMzMX0.gjc3wTLmgban3P_K6knj_3AX0vkkrwSAlBkBz_QmllE",
+									"disabled": true
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "[Moderator] Récupérer tous les articles de l'auteur \"titouan\"\"",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJsb2dpbiI6ImFkbWluaXN0cmF0b3IiLCJyb2xlIjoibW9kZXJhdG9yIiwiZXhwIjoxNjg4ODU1MDcxfQ.MoS3RnVnbCCacxlqDBp8Nc4MsDiI6SHdIDOI9phCqtE",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [
+							{
+								"key": "bearer",
+								"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJsb2dpbiI6InlvdW5nd2F5Iiwicm9sZSI6Im1vZGVyYXRvciIsImV4cCI6MTY4MjQwNzYyOH0.kI73xk-MXighONfjW-D-fFh-50XeoRiI-77JoLvgXDI",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "http://35.204.89.58/iutapi/author/titouan",
+							"protocol": "http",
+							"host": [
+								"35",
+								"204",
+								"89",
+								"58"
+							],
+							"path": [
+								"iutapi",
+								"author",
+								"titouan"
+							],
+							"query": [
+								{
+									"key": "bearer",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJsb2dpbiI6InlvdW5nd2F5Iiwicm9sZSI6Im1vZGVyYXRvciIsImV4cCI6MTY4MjQwOTMzMX0.gjc3wTLmgban3P_K6knj_3AX0vkkrwSAlBkBz_QmllE",
+									"disabled": true
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "[Publisher] Publier un article",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJsb2dpbiI6InRoZW8iLCJyb2xlIjoicHVibGlzaGVyIiwiZXhwIjoxNjg4ODU1MTgyfQ.kIChZeoVD_4eVksKlzn3XoEPT8ztO513bTk-kdVfiQw",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"Contenu\" : \"Nouvel article test\"\r\n}"
+						},
+						"url": {
+							"raw": "http://35.204.89.58/iutapi/ajouterArticle",
+							"protocol": "http",
+							"host": [
+								"35",
+								"204",
+								"89",
+								"58"
+							],
+							"path": [
+								"iutapi",
+								"ajouterArticle"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "[Publisher] Afficher les articles publié par l'utilisateur connecté",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJsb2dpbiI6InRoZW8iLCJyb2xlIjoicHVibGlzaGVyIiwiZXhwIjoxNjg4ODU1MTgyfQ.kIChZeoVD_4eVksKlzn3XoEPT8ztO513bTk-kdVfiQw",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://35.204.89.58/iutapi/mesArticles",
+							"protocol": "http",
+							"host": [
+								"35",
+								"204",
+								"89",
+								"58"
+							],
+							"path": [
+								"iutapi",
+								"mesArticles"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "[Moderator] Supprimer l'article correspond à l'id renseigné à la fin de l'url",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJsb2dpbiI6ImFkbWluaXN0cmF0b3IiLCJyb2xlIjoibW9kZXJhdG9yIiwiZXhwIjoxNjg4ODU1MDcxfQ.MoS3RnVnbCCacxlqDBp8Nc4MsDiI6SHdIDOI9phCqtE",
+									"type": "string"
+								}
+							]
+						},
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "http://35.204.89.58/iutapi/supprimerArticle/20",
+							"protocol": "http",
+							"host": [
+								"35",
+								"204",
+								"89",
+								"58"
+							],
+							"path": [
+								"iutapi",
+								"supprimerArticle",
+								"20"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "[Publisher] Modifier le contenu d'un article",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJsb2dpbiI6InRoZW8iLCJyb2xlIjoicHVibGlzaGVyIiwiZXhwIjoxNjg4ODU1MTgyfQ.kIChZeoVD_4eVksKlzn3XoEPT8ztO513bTk-kdVfiQw",
+									"type": "string"
+								}
+							]
+						},
+						"method": "PATCH",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n   \"Contenu\" : \"Article modifié\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://35.204.89.58/iutapi/modifierArticle/3",
+							"protocol": "http",
+							"host": [
+								"35",
+								"204",
+								"89",
+								"58"
+							],
+							"path": [
+								"iutapi",
+								"modifierArticle",
+								"3"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "[Publisher] Ajouter un like à un article",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJsb2dpbiI6InRoZW8iLCJyb2xlIjoicHVibGlzaGVyIiwiZXhwIjoxNjg4ODU1MTgyfQ.kIChZeoVD_4eVksKlzn3XoEPT8ztO513bTk-kdVfiQw",
+									"type": "string"
+								}
+							]
+						},
+						"method": "PATCH",
+						"header": [],
+						"url": {
+							"raw": "http://35.204.89.58/iutapi/ajouterLikeArticle/4",
+							"protocol": "http",
+							"host": [
+								"35",
+								"204",
+								"89",
+								"58"
+							],
+							"path": [
+								"iutapi",
+								"ajouterLikeArticle",
+								"4"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "[Publisher] Enlever le dislike d'un article",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJsb2dpbiI6InRoZW8iLCJyb2xlIjoicHVibGlzaGVyIiwiZXhwIjoxNjg4ODU1MTgyfQ.kIChZeoVD_4eVksKlzn3XoEPT8ztO513bTk-kdVfiQw",
+									"type": "string"
+								}
+							]
+						},
+						"method": "PATCH",
+						"header": [],
+						"url": {
+							"raw": "http://35.204.89.58/iutapi/enleverDislikeArticle/2",
+							"protocol": "http",
+							"host": [
+								"35",
+								"204",
+								"89",
+								"58"
+							],
+							"path": [
+								"iutapi",
+								"enleverDislikeArticle",
+								"2"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "[Publisher] Ajouter un dislike à un article",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJsb2dpbiI6InRoZW8iLCJyb2xlIjoicHVibGlzaGVyIiwiZXhwIjoxNjg4ODU1MTgyfQ.kIChZeoVD_4eVksKlzn3XoEPT8ztO513bTk-kdVfiQw",
+									"type": "string"
+								}
+							]
+						},
+						"method": "PATCH",
+						"header": [],
+						"url": {
+							"raw": "http://35.204.89.58/iutapi/ajouterDislikeArticle/2",
+							"protocol": "http",
+							"host": [
+								"35",
+								"204",
+								"89",
+								"58"
+							],
+							"path": [
+								"iutapi",
+								"ajouterDislikeArticle",
+								"2"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "[Publisher] Enlever le like d'un article",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJsb2dpbiI6InRoZW8iLCJyb2xlIjoicHVibGlzaGVyIiwiZXhwIjoxNjg4ODU1MTgyfQ.kIChZeoVD_4eVksKlzn3XoEPT8ztO513bTk-kdVfiQw",
+									"type": "string"
+								}
+							]
+						},
+						"method": "PATCH",
+						"header": [],
+						"url": {
+							"raw": "http://35.204.89.58/iutapi/enleverLikeArticle/2",
+							"protocol": "http",
+							"host": [
+								"35",
+								"204",
+								"89",
+								"58"
+							],
+							"path": [
+								"iutapi",
+								"enleverLikeArticle",
+								"2"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Authentification moderator",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJsb2dpbiI6InlvdW5nd2F5Iiwicm9sZSI6Im1vZGVyYXRvciIsImV4cCI6MTY4MDA4NDc5M30.0QdVPlevvEpIeasslSnnK21qTjKV0ae5xCFgcH5SvlI",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"login\" : \"administrator\",\r\n    \"password\" : \"iutinfo\",\r\n    \"role\" : \"moderator\"\r\n}"
+				},
+				"url": {
+					"raw": "http://35.204.89.58/iutapi/authentifier",
+					"protocol": "http",
+					"host": [
+						"35",
+						"204",
+						"89",
+						"58"
+					],
+					"path": [
+						"iutapi",
+						"authentifier"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Authentification publisher",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"login\" : \"theo\",\r\n    \"password\" : \"iutinfo\",\r\n    \"role\" : \"publisher\"\r\n}"
+				},
+				"url": {
+					"raw": "http://35.204.89.58/iutapi/authentifier",
+					"protocol": "http",
+					"host": [
+						"35",
+						"204",
+						"89",
+						"58"
+					],
+					"path": [
+						"iutapi",
+						"authentifier"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "[User Story 1] Consulter n'importe quel article",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [
+					{
+						"key": "bearer",
+						"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJsb2dpbiI6InlvdW5nd2F5Iiwicm9sZSI6Im1vZGVyYXRvciIsImV4cCI6MTY4MjQwNzYyOH0.kI73xk-MXighONfjW-D-fFh-50XeoRiI-77JoLvgXDI",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "http://35.204.89.58/iutapi/articles",
+					"protocol": "http",
+					"host": [
+						"35",
+						"204",
+						"89",
+						"58"
+					],
+					"path": [
+						"iutapi",
+						"articles"
+					],
+					"query": [
+						{
+							"key": "bearer",
+							"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJsb2dpbiI6InlvdW5nd2F5Iiwicm9sZSI6Im1vZGVyYXRvciIsImV4cCI6MTY4MjQwOTMzMX0.gjc3wTLmgban3P_K6knj_3AX0vkkrwSAlBkBz_QmllE",
+							"disabled": true
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "[User Story 2] Consulter les article d'un auteur",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJsb2dpbiI6ImFkbWluaXN0cmF0b3IiLCJyb2xlIjoibW9kZXJhdG9yIiwiZXhwIjoxNjg4ODU1MDcxfQ.MoS3RnVnbCCacxlqDBp8Nc4MsDiI6SHdIDOI9phCqtE",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [
+					{
+						"key": "bearer",
+						"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJsb2dpbiI6InlvdW5nd2F5Iiwicm9sZSI6Im1vZGVyYXRvciIsImV4cCI6MTY4MjQwNzYyOH0.kI73xk-MXighONfjW-D-fFh-50XeoRiI-77JoLvgXDI",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "http://35.204.89.58/iutapi/author/titouan",
+					"protocol": "http",
+					"host": [
+						"35",
+						"204",
+						"89",
+						"58"
+					],
+					"path": [
+						"iutapi",
+						"author",
+						"titouan"
+					],
+					"query": [
+						{
+							"key": "bearer",
+							"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJsb2dpbiI6InlvdW5nd2F5Iiwicm9sZSI6Im1vZGVyYXRvciIsImV4cCI6MTY4MjQwOTMzMX0.gjc3wTLmgban3P_K6knj_3AX0vkkrwSAlBkBz_QmllE",
+							"disabled": true
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "[User Story 3] Supprimer n'importe quel article",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJsb2dpbiI6ImFkbWluaXN0cmF0b3IiLCJyb2xlIjoibW9kZXJhdG9yIiwiZXhwIjoxNjg4ODU1NTI1fQ.POi1jfFJHR1dcoTp9pP0cYNMYF61XUw79oKY7SNC34A",
+							"type": "string"
+						}
+					]
+				},
+				"method": "DELETE",
+				"header": [],
+				"url": {
+					"raw": "http://35.204.89.58/iutapi/supprimerArticle/41",
+					"protocol": "http",
+					"host": [
+						"35",
+						"204",
+						"89",
+						"58"
+					],
+					"path": [
+						"iutapi",
+						"supprimerArticle",
+						"41"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "[User Story 4] Modifier le contenu d'un article",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJsb2dpbiI6InRoZW8iLCJyb2xlIjoicHVibGlzaGVyIiwiZXhwIjoxNjg4ODU3NTE0fQ.1-2ZdM-9euFdmEP9mCp-VjYo05n9U7tiCU-9md7c3yo",
+							"type": "string"
+						}
+					]
+				},
+				"method": "PATCH",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n   \"Contenu\" : \"Article modifié\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://35.204.89.58/iutapi/modifierArticle/3",
+					"protocol": "http",
+					"host": [
+						"35",
+						"204",
+						"89",
+						"58"
+					],
+					"path": [
+						"iutapi",
+						"modifierArticle",
+						"3"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "[User Story 5] Poster un article",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJsb2dpbiI6InRoZW8iLCJyb2xlIjoicHVibGlzaGVyIiwiZXhwIjoxNjg4ODU3NTE0fQ.1-2ZdM-9euFdmEP9mCp-VjYo05n9U7tiCU-9md7c3yo",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"Contenu\" : \"Nouvel article test\"\r\n}"
+				},
+				"url": {
+					"raw": "http://35.204.89.58/iutapi/ajouterArticle",
+					"protocol": "http",
+					"host": [
+						"35",
+						"204",
+						"89",
+						"58"
+					],
+					"path": [
+						"iutapi",
+						"ajouterArticle"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "[User Story 6] Liker un article",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJsb2dpbiI6InRoZW8iLCJyb2xlIjoicHVibGlzaGVyIiwiZXhwIjoxNjg4ODU3NzkzfQ.Ox99oFjNVLR3pNJNHGjbJRpLZj5WlDMdmenkOmTVl_g",
+							"type": "string"
+						}
+					]
+				},
+				"method": "PATCH",
+				"header": [],
+				"url": {
+					"raw": "http://35.204.89.58/iutapi/ajouterLikeArticle/28",
+					"protocol": "http",
+					"host": [
+						"35",
+						"204",
+						"89",
+						"58"
+					],
+					"path": [
+						"iutapi",
+						"ajouterLikeArticle",
+						"28"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "[User Story 7] Disliker un article",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJsb2dpbiI6InRoZW8iLCJyb2xlIjoicHVibGlzaGVyIiwiZXhwIjoxNjg4ODU3NzkzfQ.Ox99oFjNVLR3pNJNHGjbJRpLZj5WlDMdmenkOmTVl_g",
+							"type": "string"
+						}
+					]
+				},
+				"method": "PATCH",
+				"header": [],
+				"url": {
+					"raw": "http://35.204.89.58/iutapi/ajouterDislikeArticle/28",
+					"protocol": "http",
+					"host": [
+						"35",
+						"204",
+						"89",
+						"58"
+					],
+					"path": [
+						"iutapi",
+						"ajouterDislikeArticle",
+						"28"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
